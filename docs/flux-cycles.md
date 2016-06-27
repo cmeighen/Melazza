@@ -1,17 +1,5 @@
 # Flux Cycles
 
-Flux loops are organized by data type. Under each data type, there may
-be sub-categories, and each action is listed with the sequence of events
-that result from its invocation, ending with the API or store. Finally,
-store listeners are listed at the end.
-
-You should be able to use this document trace an **action** starting
-with where it was invoked, through the **API**/**store** involved, and
-finally to the **components** that update as a result. This is important
-because once you start implementing your flux loops, that's precisely
-what you'll need to do.
-
-
 ## Post Cycles
 
 ### Posts API Request Actions
@@ -60,21 +48,41 @@ what you'll need to do.
 * `PostsIndex` component listens to `Post` store.
 * `PostDetail` component listens to `Post` store.
 
-## SearchSuggestion Cycles
+## Comment Cycles
 
-* `fetchSearchSuggestions`
-  0. invoked from `PostSearchBar` `onChange` when there is text
-  0. `GET /api/posts` is called with `text` param.
-  0. `receiveSearchSuggestions` is set as the callback.
+### Comments API Request Actions
 
-* `receiveSearchSuggestions`
+* `fetchAllComments`
+  0. invoked from `CommentsIndex` `didMount`/`willReceiveProps`
+  0. `GET /api/comments` is called.
+  0. `receiveAllComments` is set as the callback.
+
+* `createComment`
+  0. invoked from new post button `onClick`
+  0. `POST /api/comments` is called.
+  0. `receiveSingleComment` is set as the callback.
+
+* `updateComment`
+  0. invoked from `CommentForm` `onSubmit`
+  0. `POST /api/comments` is called.
+  0. `receiveSingleComment` is set as the callback.
+
+* `destroyComment`
+  0. invoked from delete note button `onClick`
+  0. `DELETE /api/comments/:id` is called.
+  0. `removeComment` is set as the callback.
+
+### Comments API Response Actions
+
+* `receiveAllComments`
   0. invoked from an API callback.
-  0. `SearchSuggestion` store updates `_suggestions` and emits change.
+  0. `Comment` store updates `_comments` and emits change.
 
-* `removeSearchSuggestions`
-  0. invoked from `PostSearchBar` `onChange` when empty
-  0. `SearchSuggestion` store resets `_suggestions` and emits change.
+* `removeComment`
+  0. invoked from an API callback.
+  0. `Comment` store removes `_comments[id]` and emits change.
 
 ### Store Listeners
 
-* `SearchBarSuggestions` component listens to `SearchSuggestion` store.
+* `CommentsIndex` component listens to `Comment` store.
+* `CommentDetail` component listens to `Comment` store.

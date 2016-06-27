@@ -9,29 +9,35 @@
 
 ## Flux
 ### Views (React Components)
-* NotesIndex
-  - NotesIndexItem
-* NoteForm
+* PostsIndex
+  - PostsIndexItem
+* PostForm
 
 ### Stores
-* Note
+* Posts
 
 ### Actions
-* ApiActions.receiveAllNotes -> triggered by ApiUtil
-* ApiActions.receiveSingleNote
-* ApiActions.deleteNote
-* NoteActions.fetchAllNotes -> triggers ApiUtil
-* NoteActions.fetchSingleNote 
-* NoteActions.createNote
-* NoteActions.editNote 
-* NoteActions.destroyNote
+* ApiActions.receiveAllPosts -> triggered by ApiUtil
+* ApiActions.receiveSinglePost
+* ApiActions.deletePost
+* ApiActions.receiveSinglePostComments
+* PostActions.fetchAllPosts -> triggers ApiUtil
+* PostActions.fetchSinglePost
+* PostActions.createPost
+* PostActions.editPost
+* PostActions.destroyPost
+* PostCommentActions.fetchAllPostComments
+* PostCommentActions.fetchSinglePostComment
+* PostCommentActions.createPostComment
+* PostCommentActions.editPostComment
+* PostCommentActions.destroyPostComment
 
 ### ApiUtil
-* ApiUtil.fetchAllNotes
-* ApiUtil.fetchSingleNote
-* ApiUtil.createNote
-* ApiUtil.editNote
-* ApiUtil.destroyNote
+* ApiUtil.fetchAllPosts
+* ApiUtil.fetchSinglePost
+* ApiUtil.createPost
+* ApiUtil.editPost
+* ApiUtil.destroyPost
 
 ## Gems/Libraries
 * Flux Dispatcher (npm)

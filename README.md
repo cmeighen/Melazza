@@ -6,27 +6,33 @@
 
 ## Minimum Viable Product
 
+Melazza is a web application modeled after Piazza that will be built using Ruby on Rails and React.js.
+
 FresherNote is a web application inspired by Evernote that will be build using Ruby on Rails and React.js.  By the end of Week 9, this app will, at a minimum, satisfy the following criteria:
 
 - [ ] Hosting on Heroku
 - [ ] New account creation, login, and guest/demo login
-- [ ] A production README, replacing this README (**NB**: check out the [sample production README](docs/production_readme.md) -- you'll write this later)
-- [ ] Notes
-  - [ ] Smooth, bug-free navigation
-  - [ ] Adequate seed data to demonstrate the site's features
-  - [ ] Adequate CSS styling
-- [ ] Notebooks for organizing notes
-  - [ ] Smooth, bug-free navigation
-  - [ ] Adequate seed data to demonstrate the site's features
-  - [ ] Adequate CSS styling
-- [ ] Tags for notes
-  - [ ] Smooth, bug-free navigation
-  - [ ] Adequate seed data to demonstrate the site's features
-  - [ ] Adequate CSS styling
-- [ ] Rich Text Editing of notes
-  - [ ] Smooth, bug-free navigation
-  - [ ] Adequate seed data to demonstrate the site's features
-  - [ ] Adequate CSS styling
+- [ ] A production README.
+- [ ] Adequate seed data to demonstrate the site's features
+- [ ] Adequate CSS styling
+- [ ] Smooth, bug-free navigation
+- [ ] Question Post Creation
+  - [ ] Questions can be created, edited, and viewed.  
+  - [ ] Questions track a sufficient amount of data to enable a variety of search angles.
+  - [ ] Question Post Body can only be edited by submitting user.
+- [ ] Collaborative (Student) Answer Fields
+  - [ ] Can be edited by all users.
+  - [ ] Changes are submitted in real time, with "new" edits badge visible in the question index view.
+  - [ ] Field submission history is tracked.
+- [ ] Searchable Question Index
+  - [ ] Search can check titles, question body, and answer bodies.
+  - [ ] Search can group posts by week.
+  - [ ] Posts can be flagged as pinned and will display as the first group.
+- [ ] Sorting Folders
+  - [ ] Posts can be placed into folders.
+  - [ ] Folders will hold a set of posts.
+  - [ ] Clicked folders will display that set of posts in the SQI.
+
 
 ## Design Docs
 * [View Wireframes][views]
@@ -53,14 +59,14 @@ FresherNote is a web application inspired by Evernote that will be build using R
 - [ ] user signup/signin pages
 - [ ] blank landing page after signin
 
-### Phase 2: Notes Model, API, and basic APIUtil (1.5 days, W1 Th 12pm)
+### Phase 2: Posts Model, API, and basic APIUtil (1.5 days, W1 Th 12pm)
 
-**Objective:** Notes can be created, read, edited and destroyed through
+**Objective:** Posts can be created, read, edited and destroyed through
 the API.
 
-- [ ] create `Note` model
+- [ ] create `Post` model
 - [ ] seed the database with a small amount of test data
-- [ ] CRUD API for notes (`NotesController`)
+- [ ] CRUD API for notes (`PostsController`)
 - [ ] jBuilder views for notes
 - [ ] setup Webpack & Flux scaffold
 - [ ] setup `APIUtil` to interact with the API
@@ -68,16 +74,16 @@ the API.
 
 ### Phase 3: Flux Architecture and Router (1.5 days, W1 F 6pm)
 
-**Objective:** Notes can be created, read, edited and destroyed with the
+**Objective:** Posts can be created, read, edited and destroyed with the
 user interface.
 
 - [ ] setup the flux loop with skeleton files
 - [ ] setup React Router
 - implement each note component, building out the flux loop as needed.
-  - [ ] `NotesIndex`
-  - [ ] `NoteIndexItem`
-  - [ ] `NoteForm`
-- [ ] save Notes to the DB when the form loses focus or is left idle
+  - [ ] `PostsIndex`
+  - [ ] `PostIndexItem`
+  - [ ] `PostForm`
+- [ ] save Posts to the DB when the form loses focus or is left idle
   after editing.
 
 ### Phase 4: Start Styling (0.5 days, W2 M 12pm)
@@ -88,42 +94,40 @@ user interface.
 - [ ] position elements on the page
 - [ ] add basic colors & styles
 
-### Phase 5: Notebooks (1 day, W2 Tu 12pm)
+### Phase 5: Search (1 day, W2 Tu 12pm)
 
-**Objective:** Notes belong to Notebooks, and can be viewed by notebook.
+**Objective:** Posts can be searched.
 
-- [ ] create `Notebook` model
+- [ ] create Search
 - build out API, Flux loop, and components for:
-  - [ ] Notebook CRUD
-  - [ ] adding notes requires a notebook
-  - [ ] moving notes to a different notebook
-  - [ ] viewing notes by notebook
-- Use CSS to style new views
+  - [ ] Searching Posts based on inputs
+  - [ ] Search updates live
+  - [ ] Search can specify title, body, comment fields to be searched
 
-Phase 3 adds organization to the Notes. Notes belong to a Notebook,
-which has its own `Index` view.
+### Phase 6: Tags/Folders (1 days, W2 Th 12pm)
 
-### Phase 6: Tags (1 days, W2 Th 12pm)
+**Objective:** Posts can be tagged with folders, folders are displayed in the second bar of the page.
 
-**Objective:** Notes can be tagged with multiple tags, and tags are searchable.
-
-- [ ] create `Tag` model and join table
+- [ ] create `Folder` model and join table
 - build out API, Flux loop, and components for:
-  - [ ] fetching tags for notebook
-  - [ ] adding tags to notebook
-  - [ ] creating tags while adding to notebooks
-  - [ ] searching notebooks by tag
+  - [ ] fetching folders
+  - [ ] adding folders to posts
+  - [ ] creating folders
+  - [ ] updating display when folder is clicked
 - [ ] Style new elements
 
-### Phase 7: Allow Complex Styling in Notes (0.5 days, W2 Th 6pm)
+### Phase 7: PostComments (1 day, W2 F 12pm)
 
-**objective:** Enable complex styling of notes.
+**Objective:** Posts have general comments, acting as an active chat for that post.
 
-- [ ] Integrate `react-quill` (based on Quill.js).
-- [ ] Use Rails helpers to sanitize HTML before rendering.
-- [ ] Style the new Quill elements.
+- [ ] create 'PostComments' model and table
+- build out API, Flux loop, and components for:
+  - [ ] fetching PostComments
+  - [ ] adding comments to posts
+  - [ ] creating comments
+  - [ ] updating display when comments are created
 
-### Phase 8: Styling Cleanup and Seeding (1 day, W2 F 6pm)
+### Phase 8: Styling Cleanup and Seeding (.5 days, W2 F 6pm)
 
 **objective:** Make the site feel more cohesive and awesome.
 
@@ -132,10 +136,10 @@ which has its own `Index` view.
 - [ ] Add modals, transitions, and other styling flourishes.
 
 ### Bonus Features (TBD)
-- [ ] Search through notes for blocks of text
-- [ ] Pagination / infinite scroll for Notes Index
-- [ ] Set reminders on notes
-- [ ] Changelogs for Notes
+- [ ] TA Answer
+- [ ] Pagination / infinite scroll for Posts Index
+- [ ] Pagination / infinite scroll for PostComments
+- [ ] Changelogs for Posts
 - [ ] Multiple sessions
 
 [phase-one]: docs/phases/phase1.md

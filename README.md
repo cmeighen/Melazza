@@ -8,15 +8,13 @@
 
 Melazza is a web application modeled after Piazza that will be built using Ruby on Rails and React.js.
 
-FresherNote is a web application inspired by Evernote that will be build using Ruby on Rails and React.js.  By the end of Week 9, this app will, at a minimum, satisfy the following criteria:
-
 - [ ] Hosting on Heroku
 - [ ] New account creation, login, and guest/demo login
 - [ ] A production README.
 - [ ] Adequate seed data to demonstrate the site's features
 - [ ] Adequate CSS styling
 - [ ] Smooth, bug-free navigation
-- [ ] Question Post Creation
+- [ ] Question/Post Creation
   - [ ] Questions can be created, edited, and viewed.  
   - [ ] Questions track a sufficient amount of data to enable a variety of search angles.
   - [ ] Question Post Body can only be edited by submitting user.

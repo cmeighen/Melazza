@@ -1,12 +1,12 @@
-# Melazza
+# collabright
 
-[Heroku link][heroku] **Note:** This should be a link to your production site
+[Heroku link][heroku]
 
 [heroku]: http://www.herokuapp.com
 
 ## Minimum Viable Product
 
-Melazza is a web application modeled after Piazza that will be built using Ruby on Rails and React.js.
+collabright is a web application modeled after Piazza that will be built using Ruby on Rails and React.js.
 
 - [ ] Hosting on Heroku
 - [ ] New account creation, login, and guest/demo login
@@ -14,20 +14,24 @@ Melazza is a web application modeled after Piazza that will be built using Ruby 
 - [ ] Adequate seed data to demonstrate the site's features
 - [ ] Adequate CSS styling
 - [ ] Smooth, bug-free navigation
-- [ ] Question/Post Creation
-  - [ ] Questions can be created, edited, and viewed.  
-  - [ ] Questions track a sufficient amount of data to enable a variety of search angles.
-  - [ ] Question Post Body can only be edited by submitting user.
+- [ ] Ability to Create and Save Posts
+  - [ ] Posts can be created, edited, and viewed.  
+  - [ ] Posts track date submitted, last updated date, type of submission(user or instructor), type of post(public question, note, instructor only).
+  - [ ] Post Body can only be edited by owner.
 - [ ] Collaborative (Student) Answer Fields
   - [ ] Can be edited by all users.
   - [ ] Changes are submitted in real time, with "new" edits badge visible in the question index view.
   - [ ] Field submission history is tracked.
-- [ ] Searchable Question Index
+- [ ] User Homepage
+  - [ ] Homepage displays navigation components
+  - [ ] Homepage requires user login before loading further data.
+  - [ ] User can open and close the Post Search List
+- [ ] Post Search List
   - [ ] Search can check titles, question body, and answer bodies.
   - [ ] Search can group posts by week.
   - [ ] Posts can be flagged as pinned and will display as the first group.
-- [ ] Sorting Folders
-  - [ ] Posts can be placed into folders.
+- [ ] Tags/Sorting Folders
+  - [ ] Posts can be tagged into folders.
   - [ ] Folders will hold a set of posts.
   - [ ] Clicked folders will display that set of posts in the SQI.
 
@@ -84,13 +88,11 @@ user interface.
 - [ ] save Posts to the DB when the form loses focus or is left idle
   after editing.
 
-### Phase 4: Start Styling (0.5 days, W2 M 12pm)
+### Phase 4: Review And Polish (0.5 days, W2 M 12pm)
 
 **Objective:** Existing pages (including signup/signin) will look good.
 
-- [ ] create a basic style guide
-- [ ] position elements on the page
-- [ ] add basic colors & styles
+- [ ] review work so far
 
 ### Phase 5: Search (1 day, W2 Tu 12pm)
 

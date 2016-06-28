@@ -1,0 +1,31 @@
+{
+  "name": "project_folder",
+  "version": "1.0.0",
+  "description": "[Heroku link][heroku]",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cmeighen/collabright.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cmeighen/collabright/issues"
+  },
+  "engines": {
+    "node": "6.0.0",
+    "npm": "3.8.6"
+  },
+  "scripts": {
+    "postinstall": "./node_modules/.bin/webpack"
+  },
+  "homepage": "https://github.com/cmeighen/collabright#readme"
+}

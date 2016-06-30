@@ -17,6 +17,7 @@
 ## Routes
 
 * **component:** `App` **path:** `/`
+  * **component:** `Folder` **path:** `folders`
   * **component:** `User` **path:** `users`
   * **component:** `Session` **path:** `session`
   * **component:** `PostsIndex` **path:** `posts`

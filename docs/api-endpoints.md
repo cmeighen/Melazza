@@ -6,26 +6,39 @@
 
 - `GET /` - loads React web app
 
+## JSON API
+
 ### Users
 
-- `GET /users/new`
-- `POST /users`
-- `PATCH /users`
+- `POST /api/users`
+- `PATCH /api/users`
 
 ### Session
 
-- `GET /session/new`
-- `POST /session`
-- `DELETE /session`
-
-## JSON API
+- `POST /api/session`
+- `DELETE /api/session`
 
 ### Posts
 
 - `GET /api/posts`
   - Posts index/search
-  - accepts pagination params (if I get there)
 - `POST /api/posts`
 - `GET /api/posts/:id`
 - `PATCH /api/posts/:id`
 - `DELETE /api/posts/:id`
+
+### PostComments
+
+- `GET /api/posts/:id/comments`
+- `POST /api/posts/:id/comments`
+- `PATCH /api/posts/:id/comments/:comment_id`
+- `DELETE /api/posts/:id/comments/:comment_id`
+
+### Folders
+
+- `GET /api/folders`
+- `POST /api/folders`
+- `GET /api/folders/:id`
+- `PATCH /api/folders/:id`
+- `POST /api/posts/:id/folders`
+- `DELETE /api/folders`

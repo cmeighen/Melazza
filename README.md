@@ -2,7 +2,7 @@
 
 [Heroku link][heroku]
 
-[heroku]: http://www.herokuapp.com
+[heroku]: https://collabright.herokuapp.com/
 
 ## Minimum Viable Product
 
@@ -65,11 +65,11 @@ collabright is a web application modeled after Piazza that will be built using R
 
 **Objective:** Posts can be created, read, edited and destroyed through
 the API.
-
+post
 - [ ] create `Post` model
 - [ ] seed the database with a small amount of test data
-- [ ] CRUD API for notes (`PostsController`)
-- [ ] jBuilder views for notes
+- [ ] CRUD API for posts (`PostsController`)
+- [ ] jBuilder views for posts
 - [ ] setup Webpack & Flux scaffold
 - [ ] setup `APIUtil` to interact with the API
 - [ ] test out API interaction in the console.
@@ -81,7 +81,7 @@ user interface.
 
 - [ ] setup the flux loop with skeleton files
 - [ ] setup React Router
-- implement each note component, building out the flux loop as needed.
+- implement each post component, building out the flux loop as needed.
   - [ ] `PostsIndex`
   - [ ] `PostIndexItem`
   - [ ] `PostForm`

@@ -1,25 +1,34 @@
 const React = require('react');
 const ReactDOM = require('react-dom');
 const HashHistory = require('react-router').hashHistory;
-const ClientActions = require('../actions/clientActions');
+const UserActions = require('../actions/userActions');
+
+const Form = require('react-bootstrap').Form;
+const FormGroup = require('react-bootstrap').FormGroup;
+const Col = require('react-bootstrap').Col;
+const FormControl = require('react-bootstrap').FormControl;
+const Button = require('react-bootstrap').Button;
+
+const Nav = require('react-bootstrap').Nav;
+const NavItem = require('react-bootstrap').NavItem;
 
 const Login = React.createClass({
 
   getInitialState: function() {
-    return { username: '', password: '', formType: this.props.formType};
+    return { username: '', password: '', formType: 'logIn'};
   },
 
   submitHandler: function(e) {
     e.preventDefault();
-    ClientActions.clearErrors();
+    UserActions.clearErrors();
 
     if (this.state.formType === 'logIn') {
-      ClientActions.loginUser({
+      UserActions.loginUser({
         username: this.state.username,
         password: this.state.password
       });
     } else {
-      ClientActions.createUser({
+      UserActions.createUser({
         username: this.state.username,
         password: this.state.password
       });
@@ -27,7 +36,7 @@ const Login = React.createClass({
   },
 
   componentDidMount: function() {
-    ClientActions.clearErrors();
+    UserActions.clearErrors();
     let self = this;
     setTimeout(function() {
       ReactDOM.findDOMNode(self.refs.autoFocus).focus(); },
@@ -44,59 +53,43 @@ const Login = React.createClass({
     this.setState({password: e.target.value});
   },
 
-  toggleFormType: function() {
-    if (this.state.formType === 'logIn') {
-      this.setState({ formType: 'signUp'});
-    } else {
-      this.setState({ formType: 'logIn'});
-    }
+  handleSelect: function(eventKey) {
+    this.setState({ formType: eventKey });
   },
 
   render: function() {
-    if (this.state.formType === 'logIn') {
-      var toggleFormType =
-        <div className='session-form-toggle'>
-          <span className='session-form-toggle-btn' onClick={this.toggleFormType}>
-            Sign Up
-          </span>
-        </div>;
-      var submitAction =
-        <input className='modal-submit-btn' type='submit' value='Login'/>;
-    } else {
-      toggleFormType =
-        <div className='session-form-toggle'>
-          <span className='session-form-toggle-btn' onClick={this.toggleFormType}>
-          Sign In
-        </span>
-      </div>;
-
-      submitAction =
-        <input className='modal-submit-btn' type='submit' value='Sign Up'/>;
-    }
 
     return (
-      <form className='auth-form' onSubmit={this.submitHandler}>
+      <Form horizontal>
+        <Nav bsStyle="pills" activeKey={this.formType} onSelect={this.handleSelect}>
+          <NavItem eventKey="logIn">Log In</NavItem>
+          <NavItem eventKey="signUp">Sign Up</NavItem>
+        </Nav>
+        <br />
+        <FormGroup controlId="formHorizontalEmail">
+          <Col sm={2}>
+            Email
+          </Col>
+          <Col sm={10}>
+            <FormControl type="username" placeholder="Username" ref="autoFocus" onChange={this.usernameChange}/>
+          </Col>
+        </FormGroup>
 
-        {toggleFormType}
-        <div className='auth-fields'>
-          <input
-            type='text'
-            className='form-textbox'
-            ref='autoFocus'
-            value={this.state.username}
-            onChange={this.usernameChange}
-            placeholder='Username'
-          />
-          <input
-            type='password'
-            className='form-textbox'
-            value={this.state.password}
-            onChange={this.passwordChange}
-            placeholder='Password'
-          />
-        </div>
-        {submitAction}
-      </form>
+        <FormGroup controlId="formHorizontalPassword">
+          <Col sm={2}>
+            Password
+          </Col>
+          <Col sm={10}>
+            <FormControl type="password" placeholder="Password" onChange={this.passwordChange}/>
+          </Col>
+        </FormGroup>
+
+        <FormGroup>
+          <Col smOffset={2} sm={10}>
+            <Button onClick={this.submitHandler}>Submit</Button>
+          </Col>
+        </FormGroup>
+      </Form>
     );
   }
 });

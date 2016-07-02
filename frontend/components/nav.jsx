@@ -1,18 +1,22 @@
 const React = require('react');
-const ReactDOM = require('react-dom');
 
 const UserStore = require('../stores/userStore');
 const ErrorStore = require('../stores/errorStore');
-const ClientActions = require('../actions/clientActions');
+const UserActions = require('../actions/userActions');
 
 const LogIn = require('./login');
-const SignUp = require('./signup');
 const LogOut = require('./logout');
 const Errors = require('./errors');
 
 const Modal = require('boron/OutlineModal');
 
-var Nav = React.createClass({
+const PostIndex = require('./postIndex');
+
+const Navbar = require('react-bootstrap').Navbar;
+const Nav = require('react-bootstrap').Nav;
+const NavItem = require('react-bootstrap').NavItem;
+
+var Navigation = React.createClass({
 
   showModal: function() {
     this.refs.modal.show();
@@ -32,10 +36,7 @@ var Nav = React.createClass({
   componentDidMount: function() {
     this.userStoreListener = UserStore.addListener(this.__onUserChange);
     this.errorStoreListener = ErrorStore.addListener(this.__onErrorChange);
-    ClientActions.fetchCurrentUser();
-    if (!this.state.currentUser) {
-      this.showModal();
-    }
+    UserActions.fetchCurrentUser();
   },
 
   componentWillUnmount: function() {
@@ -46,8 +47,6 @@ var Nav = React.createClass({
   componentDidUpdate: function() {
     if (this.state.currentUser) {
       this.hideModal();
-    } else {
-      this.showModal();
     }
   },
 
@@ -59,6 +58,10 @@ var Nav = React.createClass({
     this.setState({ errors: ErrorStore.all() });
   },
 
+  logoutUser: function() {
+    UserActions.logoutUser();
+  },
+
   render: function() {
     if (this.state.errors.length > 0) {
       var errors = <Errors errors={this.errors} />;
@@ -66,27 +69,28 @@ var Nav = React.createClass({
 
     if (this.state.currentUser) {
       var sessionButtons =
-      <div className='session-buttons'>
-        <LogOut />
-      </div>;
+      <NavItem onClick={this.logoutUser}>Sign Out</NavItem>;
+    } else {
+      sessionButtons =
+        <NavItem onClick={this.showModal}>Sign In</NavItem>;
     }
 
     return (
-      <div>
-        <Modal className='modal-login' ref='modal' closeOnClick={false} keyboard={false} >
+      <Navbar>
+        <Navbar.Header>
+          <Navbar.Brand>
+            <a>collabright</a>
+          </Navbar.Brand>
+        </Navbar.Header>
+        <Nav pullRight>
+          {sessionButtons}
+        </Nav>
+        <Modal ref="modal">
           <LogIn />
         </Modal>
-        <nav>
-          <div className='nav-elements'>
-            <div className='nav-logo'>
-              collabright
-            </div>
-            {sessionButtons}
-          </div>
-        </nav>
-      </div>
+      </Navbar>
     );
   }
 });
 
-module.exports = Nav;
+module.exports = Navigation;

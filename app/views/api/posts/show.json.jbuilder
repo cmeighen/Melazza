@@ -1,4 +1,4 @@
-if @post
+if post
   json.extract!(@post, :title, :body, :post_type, :post_visibility)
   json.username @post.user.username
 end

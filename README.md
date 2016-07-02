@@ -85,8 +85,7 @@ user interface.
   - [ ] `PostsIndex`
   - [ ] `PostIndexItem`
   - [ ] `PostForm`
-- [ ] save Posts to the DB when the form loses focus or is left idle
-  after editing.
+
 
 ### Phase 4: Review And Polish (0.5 days, W2 M 12pm)
 

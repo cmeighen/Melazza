@@ -1,13 +1,13 @@
-var React = require("react");
-var ReactDOM = require("react-dom");
-var HashHistory = require('react-router').hashHistory;
+const React = require("react");
+const ReactDOM = require("react-dom");
+const HashHistory = require('react-router').hashHistory;
 
-var ClientActions = require("../actions/clientActions.js");
+const UserActions = require("../actions/userActions.js");
 
-var Logout = React.createClass({
+const Logout = React.createClass({
 
   logoutUser: function() {
-    ClientActions.logoutUser();
+    UserActions.logoutUser();
   },
 
   render: function() {

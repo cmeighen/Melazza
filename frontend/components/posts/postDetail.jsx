@@ -1,9 +1,7 @@
 const React = require('react');
-const ReactDOM = require('react-dom');
-
 const PostStore = require('../../stores/postStore');
 
-const Jumbotron = require('react-bootstrap').Jumbotron;
+const Panel = require('react-bootstrap').Panel;
 
 const PostDetail = React.createClass({
   getInitialState: function(){
@@ -19,7 +17,7 @@ const PostDetail = React.createClass({
   },
 
   componentDidMount: function(){
-    const postStoreListener = PostStore.addListener(this._onChange);
+    this.postStoreListener = PostStore.addListener(this._onChange);
   },
 
   componentWillReceiveProps: function(nextProps){
@@ -40,12 +38,24 @@ const PostDetail = React.createClass({
 
     return(
       <div>
-        <Jumbotron>
-          <h5>Summary</h5>
-          {this.state.post.title}
-          <h5>Body</h5>
-          {this.state.post.body}
-        </Jumbotron>
+        <div className="post-summary">
+          <Panel header="Post Details">
+            <h5>Summary</h5>
+            {this.state.post.title}
+            <h5>Body</h5>
+            {this.state.post.body}
+          </Panel>
+        </div>
+        <div className="post-answer">
+          <Panel header="Student Answer">
+            Reserved Space for Student Answer
+          </Panel>
+        </div>
+        <div className="post-discussion">
+          <Panel header="Discussion">
+            Reserved Space for Post Discussion
+          </Panel>
+        </div>
       </div>
     );
   }

@@ -9,6 +9,9 @@ const Button = require('react-bootstrap').Button;
 const Nav = require('react-bootstrap').Nav;
 const NavItem = require('react-bootstrap').NavItem;
 
+const ListGroup = require('react-bootstrap').ListGroup;
+const ListGroupItem = require('react-bootstrap').ListGroupItem;
+
 const PostIndex = React.createClass({
   getInitialState() {
     return {

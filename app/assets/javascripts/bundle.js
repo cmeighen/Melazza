@@ -33002,6 +33002,9 @@
 	var Nav = __webpack_require__(261).Nav;
 	var NavItem = __webpack_require__(261).NavItem;
 	
+	var ListGroup = __webpack_require__(261).ListGroup;
+	var ListGroupItem = __webpack_require__(261).ListGroupItem;
+	
 	var PostIndex = React.createClass({
 	  displayName: 'PostIndex',
 	  getInitialState: function getInitialState() {
@@ -52347,11 +52350,9 @@
 	'use strict';
 	
 	var React = __webpack_require__(1);
-	var ReactDOM = __webpack_require__(38);
-	
 	var PostStore = __webpack_require__(256);
 	
-	var Jumbotron = __webpack_require__(261).Jumbotron;
+	var Panel = __webpack_require__(261).Panel;
 	
 	var PostDetail = React.createClass({
 	  displayName: 'PostDetail',
@@ -52369,7 +52370,7 @@
 	  },
 	
 	  componentDidMount: function componentDidMount() {
-	    var postStoreListener = PostStore.addListener(this._onChange);
+	    this.postStoreListener = PostStore.addListener(this._onChange);
 	  },
 	
 	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
@@ -52393,20 +52394,42 @@
 	      'div',
 	      null,
 	      React.createElement(
-	        Jumbotron,
-	        null,
+	        'div',
+	        { className: 'post-summary' },
 	        React.createElement(
-	          'h5',
-	          null,
-	          'Summary'
-	        ),
-	        this.state.post.title,
+	          Panel,
+	          { header: 'Post Details' },
+	          React.createElement(
+	            'h5',
+	            null,
+	            'Summary'
+	          ),
+	          this.state.post.title,
+	          React.createElement(
+	            'h5',
+	            null,
+	            'Body'
+	          ),
+	          this.state.post.body
+	        )
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'post-answer' },
 	        React.createElement(
-	          'h5',
-	          null,
-	          'Body'
-	        ),
-	        this.state.post.body
+	          Panel,
+	          { header: 'Student Answer' },
+	          'Reserved Space for Student Answer'
+	        )
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'post-discussion' },
+	        React.createElement(
+	          Panel,
+	          { header: 'Discussion' },
+	          'Reserved Space for Post Discussion'
+	        )
 	      )
 	    );
 	  }
@@ -54377,6 +54400,8 @@
 	
 	var PostForm = __webpack_require__(546);
 	
+	var hashHistory = __webpack_require__(168).hashHistory;
+	
 	var UserActions = __webpack_require__(253);
 	
 	var Navigation = React.createClass({
@@ -54395,6 +54420,7 @@
 	  logoutUser: function logoutUser(e) {
 	    e.preventDefault();
 	    UserActions.logoutUser();
+	    hashHistory.push('/');
 	  },
 	
 	
@@ -54434,7 +54460,7 @@
 	              null,
 	              'New Post'
 	            ),
-	            React.createElement(PostForm, null)
+	            React.createElement(PostForm, { close: this.closePostForm })
 	          )
 	        ),
 	        React.createElement(
@@ -54473,7 +54499,6 @@
 	    return {
 	      title: '',
 	      body: '',
-	      author_id: window.currentUser.id,
 	      post_type: 0,
 	      post_visibility: 0
 	    };
@@ -54512,10 +54537,11 @@
 	    PostActions.createPost({
 	      title: this.state.title,
 	      body: this.state.body,
-	      author_id: this.state.author_id,
 	      post_type: this.state.post_type,
 	      post_visibility: this.state.post_visibility
 	    });
+	
+	    this.props.close();
 	  },
 	
 	  render: function render() {
@@ -54584,8 +54610,12 @@
 	      'div',
 	      null,
 	      React.createElement(Nav, null),
-	      React.createElement(PostIndex, null),
-	      this.props.children
+	      React.createElement(
+	        'div',
+	        { className: 'classroom' },
+	        React.createElement(PostIndex, null),
+	        this.props.children
+	      )
 	    );
 	  }
 	});
@@ -54605,6 +54635,8 @@
 	var Modal = __webpack_require__(261).Modal;
 	var Button = __webpack_require__(261).Button;
 	
+	var UserActions = __webpack_require__(550);
+	
 	var WelcomePage = React.createClass({
 	  displayName: 'WelcomePage',
 	  getInitialState: function getInitialState() {
@@ -54615,6 +54647,9 @@
 	  },
 	  open: function open() {
 	    this.setState({ showModal: true });
+	  },
+	  demoLogin: function demoLogin() {
+	    UserActions.loginUser({ username: "demo", password: "asdfasdf" });
 	  },
 	  render: function render() {
 	    return React.createElement(
@@ -54645,7 +54680,7 @@
 	        ),
 	        React.createElement(
 	          Button,
-	          { bsStyle: 'primary' },
+	          { bsStyle: 'primary', onClick: this.demoLogin },
 	          'Demo'
 	        ),
 	        React.createElement(
@@ -54795,6 +54830,63 @@
 	});
 	
 	module.exports = Login;
+
+/***/ },
+/* 550 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var Dispatcher = __webpack_require__(249);
+	var UserConstants = __webpack_require__(252);
+	var ErrorConstants = __webpack_require__(254);
+	var SessionApi = __webpack_require__(255);
+	
+	var UserActions = {
+	  fetchCurrentUser: function fetchCurrentUser() {
+	    SessionApi.fetchCurrentUser(UserActions.receiveCurrentUser);
+	  },
+	
+	  createUser: function createUser(user) {
+	    SessionApi.createUser(user, UserActions.receiveCurrentUser);
+	  },
+	
+	  loginUser: function loginUser(user) {
+	    SessionApi.loginUser(user, UserActions.receiveCurrentUser);
+	  },
+	
+	  logoutUser: function logoutUser() {
+	    SessionApi.logoutUser(UserActions.userLoggedOut);
+	  },
+	
+	  clearErrors: function clearErrors() {
+	    Dispatcher.dispatch({
+	      actionType: ErrorConstants.CLEAR_ERRORS
+	    });
+	  },
+	
+	  receiveCurrentUser: function receiveCurrentUser(currentUser) {
+	    Dispatcher.dispatch({
+	      actionType: UserConstants.CURRENT_USER_RECEIVED,
+	      currentUser: currentUser
+	    });
+	  },
+	
+	  userLoggedOut: function userLoggedOut() {
+	    Dispatcher.dispatch({
+	      actionType: UserConstants.LOGOUT_USER
+	    });
+	  },
+	
+	  receiveErrors: function receiveErrors(errors) {
+	    Dispatcher.dispatch({
+	      actionType: UserConstants.ERRORS_RECEIVED,
+	      errors: errors
+	    });
+	  }
+	};
+	
+	module.exports = UserActions;
 
 /***/ }
 /******/ ]);

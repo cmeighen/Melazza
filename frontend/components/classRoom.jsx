@@ -10,8 +10,10 @@ var ClassRoom = React.createClass({
     return (
       <div>
         <Nav />
-        <PostIndex />
-        {this.props.children}
+        <div className="classroom">
+          <PostIndex />
+          {this.props.children}
+        </div>
       </div>
     );
   }

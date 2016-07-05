@@ -5,6 +5,8 @@ const Jumbotron = require('react-bootstrap').Jumbotron;
 const Modal = require('react-bootstrap').Modal;
 const Button = require('react-bootstrap').Button;
 
+const UserActions = require('../actions/useractions');
+
 
 const WelcomePage = React.createClass({
   getInitialState(){
@@ -19,6 +21,10 @@ const WelcomePage = React.createClass({
     this.setState({ showModal: true });
   },
 
+  demoLogin(){
+    UserActions.loginUser({username: "demo", password: "asdfasdf"});
+  },
+
   render(){
     return (
       <Jumbotron>
@@ -27,7 +33,7 @@ const WelcomePage = React.createClass({
         <p>
           <Button bsStyle="primary" onClick={this.open}>Log In</Button>
           <Button bsStyle="primary" onClick={this.open}>Sign Up</Button>
-          <Button bsStyle="primary">Demo</Button>
+          <Button bsStyle="primary" onClick={this.demoLogin}>Demo</Button>
 
           <Modal show={this.state.showModal} onHide={this.close}>
             <Modal.Header closeButton>

@@ -9,7 +9,7 @@ const hashHistory = require('react-router').hashHistory;
 //Components
 const UserStore = require('./stores/userStore');
 const UserActions = require('./actions/userActions');
-const PostStore = require('./stores/PostStore');
+const PostStore = require('./stores/postStore');
 const PostIndex = require('./components/posts/postIndex');
 const PostDetail = require('./components/posts/postDetail');
 const Modal = require('react-modal');

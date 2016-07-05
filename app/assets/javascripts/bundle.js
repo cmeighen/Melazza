@@ -54635,7 +54635,7 @@
 	var Modal = __webpack_require__(261).Modal;
 	var Button = __webpack_require__(261).Button;
 	
-	var UserActions = __webpack_require__(550);
+	var UserActions = __webpack_require__(253);
 	
 	var WelcomePage = React.createClass({
 	  displayName: 'WelcomePage',
@@ -54830,63 +54830,6 @@
 	});
 	
 	module.exports = Login;
-
-/***/ },
-/* 550 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var Dispatcher = __webpack_require__(249);
-	var UserConstants = __webpack_require__(252);
-	var ErrorConstants = __webpack_require__(254);
-	var SessionApi = __webpack_require__(255);
-	
-	var UserActions = {
-	  fetchCurrentUser: function fetchCurrentUser() {
-	    SessionApi.fetchCurrentUser(UserActions.receiveCurrentUser);
-	  },
-	
-	  createUser: function createUser(user) {
-	    SessionApi.createUser(user, UserActions.receiveCurrentUser);
-	  },
-	
-	  loginUser: function loginUser(user) {
-	    SessionApi.loginUser(user, UserActions.receiveCurrentUser);
-	  },
-	
-	  logoutUser: function logoutUser() {
-	    SessionApi.logoutUser(UserActions.userLoggedOut);
-	  },
-	
-	  clearErrors: function clearErrors() {
-	    Dispatcher.dispatch({
-	      actionType: ErrorConstants.CLEAR_ERRORS
-	    });
-	  },
-	
-	  receiveCurrentUser: function receiveCurrentUser(currentUser) {
-	    Dispatcher.dispatch({
-	      actionType: UserConstants.CURRENT_USER_RECEIVED,
-	      currentUser: currentUser
-	    });
-	  },
-	
-	  userLoggedOut: function userLoggedOut() {
-	    Dispatcher.dispatch({
-	      actionType: UserConstants.LOGOUT_USER
-	    });
-	  },
-	
-	  receiveErrors: function receiveErrors(errors) {
-	    Dispatcher.dispatch({
-	      actionType: UserConstants.ERRORS_RECEIVED,
-	      errors: errors
-	    });
-	  }
-	};
-	
-	module.exports = UserActions;
 
 /***/ }
 /******/ ]);

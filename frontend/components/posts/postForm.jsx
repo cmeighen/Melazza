@@ -15,7 +15,6 @@ var PostForm = React.createClass({
     return {
       title: '',
       body: '',
-      author_id: window.currentUser.id,
       post_type: 0,
       post_visibility: 0
     };
@@ -54,10 +53,11 @@ var PostForm = React.createClass({
     PostActions.createPost({
       title: this.state.title,
       body: this.state.body,
-      author_id: this.state.author_id,
       post_type: this.state.post_type,
       post_visibility: this.state.post_visibility
     });
+
+    this.props.close();
   },
 
   render: function(){

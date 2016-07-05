@@ -7,6 +7,8 @@ const Modal = require('react-bootstrap').Modal;
 
 const PostForm = require('./posts/postForm');
 
+const hashHistory = require('react-router').hashHistory;
+
 const UserActions = require('../actions/userActions');
 
 
@@ -29,6 +31,7 @@ var Navigation = React.createClass({
   logoutUser(e) {
     e.preventDefault();
     UserActions.logoutUser();
+    hashHistory.push('/');
   },
 
   render: function() {
@@ -44,7 +47,7 @@ var Navigation = React.createClass({
           <Modal show={this.state.showPostFormModal} onHide={this.closePostForm}>
             <Modal.Header closeButton>
               <Modal.Title>New Post</Modal.Title>
-              <PostForm />
+              <PostForm close={this.closePostForm}/>
             </Modal.Header>
           </Modal>
           <NavItem onClick={this.logoutUser}>Log Out</NavItem>

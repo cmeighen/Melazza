@@ -5,7 +5,7 @@ const Jumbotron = require('react-bootstrap').Jumbotron;
 const Modal = require('react-bootstrap').Modal;
 const Button = require('react-bootstrap').Button;
 
-const UserActions = require('../actions/useractions');
+const UserActions = require('../actions/userActions');
 
 
 const WelcomePage = React.createClass({

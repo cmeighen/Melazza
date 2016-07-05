@@ -7,8 +7,8 @@ const PostStore = new Store(Dispatcher);
 let _posts = {};
 
 PostStore.all = function() {
-  let posts = Object.keys(_posts).map(function(postId) {
-    return _posts[postId];
+  let posts = Object.keys(_posts).map( postKey => {
+    return _posts[postKey];
   });
   return posts.reverse();
 };
@@ -17,13 +17,13 @@ PostStore.find = function(postId) {
   return _posts[postId];
 };
 
-const resetPosts = function(posts) {
+function resetPosts(posts) {
   _posts = {};
   for (let i = 0; i < posts.length; i++){
-    _posts[posts[i].id] = posts[i];
+    let post = posts[i];
+    _posts[post.id] = post;
   }
-  return _posts;
-};
+}
 
 PostStore.__onDispatch = function(payload) {
   switch (payload.actionType) {

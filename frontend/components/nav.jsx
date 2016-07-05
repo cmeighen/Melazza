@@ -1,80 +1,37 @@
 const React = require('react');
 
-const UserStore = require('../stores/userStore');
-const ErrorStore = require('../stores/errorStore');
-const UserActions = require('../actions/userActions');
-
-const LogIn = require('./login');
-const LogOut = require('./logout');
-const Errors = require('./errors');
-
-const Modal = require('boron/OutlineModal');
-
-const PostIndex = require('./postIndex');
-
 const Navbar = require('react-bootstrap').Navbar;
 const Nav = require('react-bootstrap').Nav;
 const NavItem = require('react-bootstrap').NavItem;
+const Modal = require('react-bootstrap').Modal;
+
+const PostForm = require('./posts/postForm');
+
+const UserActions = require('../actions/userActions');
+
 
 var Navigation = React.createClass({
 
-  showModal: function() {
-    this.refs.modal.show();
-  },
-
-  hideModal: function() {
-    this.refs.modal.hide();
-  },
-
-  getInitialState: function() {
+  getInitialState() {
     return {
-      currentUser: UserStore.currentUser(),
-      errors: ErrorStore.all()
+      showPostFormModal: false,
     };
   },
 
-  componentDidMount: function() {
-    this.userStoreListener = UserStore.addListener(this.__onUserChange);
-    this.errorStoreListener = ErrorStore.addListener(this.__onErrorChange);
-    UserActions.fetchCurrentUser();
+  openPostForm(){
+    this.setState({ showPostFormModal: true });
   },
 
-  componentWillUnmount: function() {
-    this.userStoreListener.remove();
-    this.errorStoreListener.remove();
+  closePostForm(){
+    this.setState({ showPostFormModal: false });
   },
 
-  componentDidUpdate: function() {
-    if (this.state.currentUser) {
-      this.hideModal();
-    }
-  },
-
-  __onUserChange: function() {
-    this.setState({ currentUser: UserStore.currentUser() });
-  },
-
-  __onErrorChange: function() {
-    this.setState({ errors: ErrorStore.all() });
-  },
-
-  logoutUser: function() {
+  logoutUser(e) {
+    e.preventDefault();
     UserActions.logoutUser();
   },
 
   render: function() {
-    if (this.state.errors.length > 0) {
-      var errors = <Errors errors={this.errors} />;
-    }
-
-    if (this.state.currentUser) {
-      var sessionButtons =
-      <NavItem onClick={this.logoutUser}>Sign Out</NavItem>;
-    } else {
-      sessionButtons =
-        <NavItem onClick={this.showModal}>Sign In</NavItem>;
-    }
-
     return (
       <Navbar>
         <Navbar.Header>
@@ -83,11 +40,15 @@ var Navigation = React.createClass({
           </Navbar.Brand>
         </Navbar.Header>
         <Nav pullRight>
-          {sessionButtons}
+          <NavItem onClick={this.openPostForm}>New Post</NavItem>
+          <Modal show={this.state.showPostFormModal} onHide={this.closePostForm}>
+            <Modal.Header closeButton>
+              <Modal.Title>New Post</Modal.Title>
+              <PostForm />
+            </Modal.Header>
+          </Modal>
+          <NavItem onClick={this.logoutUser}>Log Out</NavItem>
         </Nav>
-        <Modal ref="modal">
-          <LogIn />
-        </Modal>
       </Navbar>
     );
   }

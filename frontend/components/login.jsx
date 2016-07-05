@@ -2,6 +2,7 @@ const React = require('react');
 const ReactDOM = require('react-dom');
 const HashHistory = require('react-router').hashHistory;
 const UserActions = require('../actions/userActions');
+const UserStore = require('../stores/userStore');
 
 const Form = require('react-bootstrap').Form;
 const FormGroup = require('react-bootstrap').FormGroup;
@@ -12,6 +13,10 @@ const Button = require('react-bootstrap').Button;
 const Nav = require('react-bootstrap').Nav;
 const NavItem = require('react-bootstrap').NavItem;
 
+const hashHistory = require('react-router').hashHistory;
+
+
+
 const Login = React.createClass({
 
   getInitialState: function() {
@@ -20,23 +25,18 @@ const Login = React.createClass({
 
   submitHandler: function(e) {
     e.preventDefault();
-    UserActions.clearErrors();
-
+    const userData = {
+      username: this.state.username,
+      password: this.state.password
+    };
     if (this.state.formType === 'logIn') {
-      UserActions.loginUser({
-        username: this.state.username,
-        password: this.state.password
-      });
+      UserActions.loginUser(userData);
     } else {
-      UserActions.createUser({
-        username: this.state.username,
-        password: this.state.password
-      });
+      UserActions.createUser(userData);
     }
   },
 
   componentDidMount: function() {
-    UserActions.clearErrors();
     let self = this;
     setTimeout(function() {
       ReactDOM.findDOMNode(self.refs.autoFocus).focus(); },
@@ -60,12 +60,11 @@ const Login = React.createClass({
   render: function() {
 
     return (
-      <Form horizontal>
-        <Nav bsStyle="pills" activeKey={this.formType} onSelect={this.handleSelect}>
+      <Form horizontal onSubmit={this.submitHandler}>
+        <Nav bsStyle="pills" activeKey={this.formType} onSelect={this.handleSelect} pullRight>
           <NavItem eventKey="logIn">Log In</NavItem>
           <NavItem eventKey="signUp">Sign Up</NavItem>
         </Nav>
-        <br />
         <FormGroup controlId="formHorizontalEmail">
           <Col sm={2}>
             Email
@@ -86,7 +85,7 @@ const Login = React.createClass({
 
         <FormGroup>
           <Col smOffset={2} sm={10}>
-            <Button onClick={this.submitHandler}>Submit</Button>
+            <Button type="submit">Submit</Button>
           </Col>
         </FormGroup>
       </Form>

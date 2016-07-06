@@ -52351,6 +52351,7 @@
 	
 	var React = __webpack_require__(1);
 	var PostStore = __webpack_require__(256);
+	var Modal = __webpack_require__(261).Modal;
 	
 	var Panel = __webpack_require__(261).Panel;
 	
@@ -52392,13 +52393,13 @@
 	
 	    return React.createElement(
 	      'div',
-	      null,
+	      { className: 'post-container' },
 	      React.createElement(
 	        'div',
-	        { className: 'post-summary' },
+	        { className: 'post-details' },
 	        React.createElement(
 	          Panel,
-	          { header: 'Post Details' },
+	          { header: 'Post Details', id: 'post-details' },
 	          React.createElement(
 	            'h5',
 	            null,
@@ -54436,7 +54437,7 @@
 	          null,
 	          React.createElement(
 	            'a',
-	            null,
+	            { href: '#' },
 	            'collabright'
 	          )
 	        )
@@ -54658,12 +54659,12 @@
 	      React.createElement(
 	        'h1',
 	        null,
-	        'Welcome to Collabright'
+	        'welcome to collabright'
 	      ),
 	      React.createElement(
 	        'p',
 	        null,
-	        'Please log in or sign up to continue.'
+	        'please log in or sign up to continue'
 	      ),
 	      React.createElement(
 	        'p',
@@ -54675,22 +54676,12 @@
 	        ),
 	        React.createElement(
 	          Button,
-	          { bsStyle: 'primary', onClick: this.open },
-	          'Sign Up'
-	        ),
-	        React.createElement(
-	          Button,
 	          { bsStyle: 'primary', onClick: this.demoLogin },
 	          'Demo'
 	        ),
 	        React.createElement(
 	          Modal,
 	          { show: this.state.showModal, onHide: this.close },
-	          React.createElement(
-	            Modal.Header,
-	            { closeButton: true },
-	            'Collabright'
-	          ),
 	          React.createElement(LogIn, null)
 	        )
 	      )
@@ -54772,7 +54763,7 @@
 	      { horizontal: true, onSubmit: this.submitHandler },
 	      React.createElement(
 	        Nav,
-	        { bsStyle: 'pills', activeKey: this.formType, onSelect: this.handleSelect, pullRight: true },
+	        { bsStyle: 'pills', activeKey: this.formType, onSelect: this.handleSelect },
 	        React.createElement(
 	          NavItem,
 	          { eventKey: 'logIn' },
@@ -54785,31 +54776,35 @@
 	        )
 	      ),
 	      React.createElement(
-	        FormGroup,
-	        { controlId: 'formHorizontalEmail' },
+	        'div',
+	        null,
 	        React.createElement(
-	          Col,
-	          { sm: 2 },
-	          'Email'
+	          FormGroup,
+	          { controlId: 'formHorizontalEmail' },
+	          React.createElement(
+	            Col,
+	            { sm: 2 },
+	            'Email'
+	          ),
+	          React.createElement(
+	            Col,
+	            { sm: 10 },
+	            React.createElement(FormControl, { type: 'username', placeholder: 'Username', ref: 'autoFocus', onChange: this.usernameChange })
+	          )
 	        ),
 	        React.createElement(
-	          Col,
-	          { sm: 10 },
-	          React.createElement(FormControl, { type: 'username', placeholder: 'Username', ref: 'autoFocus', onChange: this.usernameChange })
-	        )
-	      ),
-	      React.createElement(
-	        FormGroup,
-	        { controlId: 'formHorizontalPassword' },
-	        React.createElement(
-	          Col,
-	          { sm: 2 },
-	          'Password'
-	        ),
-	        React.createElement(
-	          Col,
-	          { sm: 10 },
-	          React.createElement(FormControl, { type: 'password', placeholder: 'Password', onChange: this.passwordChange })
+	          FormGroup,
+	          { controlId: 'formHorizontalPassword' },
+	          React.createElement(
+	            Col,
+	            { sm: 2 },
+	            'Password'
+	          ),
+	          React.createElement(
+	            Col,
+	            { sm: 10 },
+	            React.createElement(FormControl, { type: 'password', placeholder: 'Password', onChange: this.passwordChange })
+	          )
 	        )
 	      ),
 	      React.createElement(

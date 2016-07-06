@@ -61,10 +61,11 @@ const Login = React.createClass({
 
     return (
       <Form horizontal onSubmit={this.submitHandler}>
-        <Nav bsStyle="pills" activeKey={this.formType} onSelect={this.handleSelect} pullRight>
+        <Nav bsStyle="pills" activeKey={this.formType} onSelect={this.handleSelect}>
           <NavItem eventKey="logIn">Log In</NavItem>
           <NavItem eventKey="signUp">Sign Up</NavItem>
         </Nav>
+        <div>
         <FormGroup controlId="formHorizontalEmail">
           <Col sm={2}>
             Email
@@ -82,7 +83,7 @@ const Login = React.createClass({
             <FormControl type="password" placeholder="Password" onChange={this.passwordChange}/>
           </Col>
         </FormGroup>
-
+        </div>
         <FormGroup>
           <Col smOffset={2} sm={10}>
             <Button type="submit">Submit</Button>

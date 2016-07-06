@@ -1,5 +1,6 @@
 const React = require('react');
 const PostStore = require('../../stores/postStore');
+const Modal = require('react-bootstrap').Modal;
 
 const Panel = require('react-bootstrap').Panel;
 
@@ -37,9 +38,9 @@ const PostDetail = React.createClass({
   render: function(){
 
     return(
-      <div>
-        <div className="post-summary">
-          <Panel header="Post Details">
+      <div className="post-container">
+        <div className="post-details">
+          <Panel header="Post Details" id="post-details">
             <h5>Summary</h5>
             {this.state.post.title}
             <h5>Body</h5>

@@ -39,7 +39,7 @@ var Navigation = React.createClass({
       <Navbar>
         <Navbar.Header>
           <Navbar.Brand>
-            <a>collabright</a>
+            <a href="#">collabright</a>
           </Navbar.Brand>
         </Navbar.Header>
         <Nav pullRight>

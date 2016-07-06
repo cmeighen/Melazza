@@ -28,17 +28,13 @@ const WelcomePage = React.createClass({
   render(){
     return (
       <Jumbotron>
-        <h1>Welcome to Collabright</h1>
-        <p>Please log in or sign up to continue.</p>
+        <h1>welcome to collabright</h1>
+        <p>please log in or sign up to continue</p>
         <p>
           <Button bsStyle="primary" onClick={this.open}>Log In</Button>
-          <Button bsStyle="primary" onClick={this.open}>Sign Up</Button>
           <Button bsStyle="primary" onClick={this.demoLogin}>Demo</Button>
 
           <Modal show={this.state.showModal} onHide={this.close}>
-            <Modal.Header closeButton>
-              Collabright
-            </Modal.Header>
             <LogIn />
           </Modal>
         </p>

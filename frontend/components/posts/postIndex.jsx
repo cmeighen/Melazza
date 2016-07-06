@@ -31,15 +31,17 @@ const PostIndex = React.createClass({
     this.setState({ posts: PostStore.all() });
   },
 
+  handleSelect(postId) {
+    hashHistory.push("/class/posts/" + postId);
+    PostActions.getPost(postId);
+  },
+
   render() {
     const posts = this.state.posts;
-    function handleSelect(postId) {
-      hashHistory.push("/class/posts/" + postId);
-    }
 
     return (
       <div className="post-index">
-        <Nav bsStyle="pills" stacked onSelect={handleSelect}>
+        <Nav bsStyle="pills" stacked onSelect={this.handleSelect}>
           {
             posts.map( post => {
               return (

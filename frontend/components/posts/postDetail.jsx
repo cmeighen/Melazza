@@ -1,8 +1,10 @@
 const React = require('react');
 const PostStore = require('../../stores/postStore');
+const PostActions = require('../../actions/postActions');
 const Modal = require('react-bootstrap').Modal;
-
 const Panel = require('react-bootstrap').Panel;
+
+const StudentAnswer = require('./postStudentAnswer');
 
 const PostDetail = React.createClass({
   getInitialState: function(){
@@ -36,6 +38,7 @@ const PostDetail = React.createClass({
   },
 
   render: function(){
+      let answers = this.state.post.answers;
 
     return(
       <div className="post-container">
@@ -49,7 +52,7 @@ const PostDetail = React.createClass({
         </div>
         <div className="post-answer">
           <Panel header="Student Answer">
-            Reserved Space for Student Answer
+           <StudentAnswer answers={answers}/>
           </Panel>
         </div>
         <div className="post-discussion">

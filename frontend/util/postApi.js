@@ -26,7 +26,6 @@ const postApi = {
       url: 'api/posts',
       data: {post: post},
       success: function(createdPost) {
-        console.log(createdPost);
         success(createdPost);
       }
     });
@@ -49,6 +48,17 @@ const postApi = {
       url: 'api/posts/' + postId.toString(),
       success: function(post) {
         success(post);
+      }
+    });
+  },
+
+  createAnswer: function(answer, success) {
+    $.ajax({
+      type: 'POST',
+      url: 'api/answers',
+      data: {answer: answer},
+      success: function(response) {
+        success(response);
       }
     });
   }

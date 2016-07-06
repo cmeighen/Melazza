@@ -33022,18 +33022,19 @@
 	  _onChange: function _onChange() {
 	    this.setState({ posts: PostStore.all() });
 	  },
+	  handleSelect: function handleSelect(postId) {
+	    hashHistory.push("/class/posts/" + postId);
+	    PostActions.getPost(postId);
+	  },
 	  render: function render() {
 	    var posts = this.state.posts;
-	    function handleSelect(postId) {
-	      hashHistory.push("/class/posts/" + postId);
-	    }
 	
 	    return React.createElement(
 	      'div',
 	      { className: 'post-index' },
 	      React.createElement(
 	        Nav,
-	        { bsStyle: 'pills', stacked: true, onSelect: handleSelect },
+	        { bsStyle: 'pills', stacked: true, onSelect: this.handleSelect },
 	        posts.map(function (post) {
 	          return React.createElement(
 	            NavItem,
@@ -33149,7 +33150,6 @@
 	      url: 'api/posts',
 	      data: { post: post },
 	      success: function success(createdPost) {
-	        console.log(createdPost);
 	        _success3(createdPost);
 	      }
 	    });
@@ -33172,6 +33172,17 @@
 	      url: 'api/posts/' + postId.toString(),
 	      success: function success(post) {
 	        _success5(post);
+	      }
+	    });
+	  },
+	
+	  createAnswer: function createAnswer(answer, _success6) {
+	    $.ajax({
+	      type: 'POST',
+	      url: 'api/answers',
+	      data: { answer: answer },
+	      success: function success(response) {
+	        _success6(response);
 	      }
 	    });
 	  }
@@ -52351,9 +52362,11 @@
 	
 	var React = __webpack_require__(1);
 	var PostStore = __webpack_require__(256);
+	var PostActions = __webpack_require__(259);
 	var Modal = __webpack_require__(261).Modal;
-	
 	var Panel = __webpack_require__(261).Panel;
+	
+	var StudentAnswer = __webpack_require__(550);
 	
 	var PostDetail = React.createClass({
 	  displayName: 'PostDetail',
@@ -52390,6 +52403,7 @@
 	
 	
 	  render: function render() {
+	    var answers = this.state.post.answers;
 	
 	    return React.createElement(
 	      'div',
@@ -52420,7 +52434,7 @@
 	        React.createElement(
 	          Panel,
 	          { header: 'Student Answer' },
-	          'Reserved Space for Student Answer'
+	          React.createElement(StudentAnswer, { answers: answers })
 	        )
 	      ),
 	      React.createElement(
@@ -54825,6 +54839,38 @@
 	});
 	
 	module.exports = Login;
+
+/***/ },
+/* 550 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	var PostStore = __webpack_require__(256);
+	var PostActions = __webpack_require__(259);
+	var Modal = __webpack_require__(261).Modal;
+	
+	var PostStudentAnswer = React.createClass({
+	  displayName: 'PostStudentAnswer',
+	
+	
+	  render: function render() {
+	    if (typeof this.props.answers === "undefined" || this.props.answers.length === 0) {
+	      return React.createElement('div', null);
+	    }
+	
+	    return React.createElement(
+	      'div',
+	      null,
+	      ' ',
+	      this.props.answers[this.props.answers.length - 1].response,
+	      ' '
+	    );
+	  }
+	});
+	
+	module.exports = PostStudentAnswer;
 
 /***/ }
 /******/ ]);

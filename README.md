@@ -11,29 +11,21 @@ collabright is a web application modeled after Piazza that will be built using R
 - [ ] Hosting on Heroku
 - [ ] New account creation, login, and guest/demo login
 - [ ] A production README.
-- [ ] Adequate seed data to demonstrate the site's features
-- [ ] Adequate CSS styling
-- [ ] Smooth, bug-free navigation
 - [ ] Ability to Create and Save Posts
   - [ ] Posts can be created, edited, and viewed.  
   - [ ] Posts track date submitted, last updated date, type of submission(user or instructor), type of post(public question, note, instructor only).
   - [ ] Post Body can only be edited by owner.
-- [ ] Collaborative (Student) Answer Fields
+- [ ] Collaborative Answer Field
   - [ ] Can be edited by all users.
   - [ ] Changes are submitted in real time, with "new" edits badge visible in the question index view.
   - [ ] Field submission history is tracked.
+- [ ] Post-level Discussion Field
+  - [ ] Users can create new comments.
+  - [ ] New comments update the discussion.
 - [ ] User Homepage
   - [ ] Homepage displays navigation components
   - [ ] Homepage requires user login before loading further data.
   - [ ] User can open and close the Post Search List
-- [ ] Post Search List
-  - [ ] Search can check titles, question body, and answer bodies.
-  - [ ] Search can group posts by week.
-  - [ ] Posts can be flagged as pinned and will display as the first group.
-- [ ] Tags/Sorting Folders
-  - [ ] Posts can be tagged into folders.
-  - [ ] Folders will hold a set of posts.
-  - [ ] Clicked folders will display that set of posts in the SQI.
 
 
 ## Design Docs
@@ -135,6 +127,8 @@ user interface.
 - [ ] Add modals, transitions, and other styling flourishes.
 
 ### Bonus Features (TBD)
+- [ ] Posts Search
+- [ ] Tagging/Folders
 - [ ] TA Answer
 - [ ] Pagination / infinite scroll for Posts Index
 - [ ] Pagination / infinite scroll for PostComments

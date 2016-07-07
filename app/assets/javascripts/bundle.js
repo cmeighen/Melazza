@@ -52428,15 +52428,7 @@
 	          this.state.post.body
 	        )
 	      ),
-	      React.createElement(
-	        'div',
-	        { className: 'post-answer' },
-	        React.createElement(
-	          Panel,
-	          { header: 'Student Answer' },
-	          React.createElement(StudentAnswer, { answers: answers })
-	        )
-	      ),
+	      React.createElement(StudentAnswer, { answers: answers }),
 	      React.createElement(
 	        'div',
 	        { className: 'post-discussion' },
@@ -54499,7 +54491,6 @@
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(38);
 	var PostActions = __webpack_require__(259);
-	var UserStore = __webpack_require__(230);
 	var PostStore = __webpack_require__(256);
 	
 	var FormGroup = __webpack_require__(261).FormGroup;
@@ -54850,27 +54841,183 @@
 	var PostStore = __webpack_require__(256);
 	var PostActions = __webpack_require__(259);
 	var Modal = __webpack_require__(261).Modal;
+	var Panel = __webpack_require__(261).Panel;
+	var Button = __webpack_require__(261).Button;
+	var StudentAnswerForm = __webpack_require__(551);
 	
 	var PostStudentAnswer = React.createClass({
 	  displayName: 'PostStudentAnswer',
+	  getInitialState: function getInitialState() {
+	    return {
+	      showStudentAnswerModal: false
+	    };
+	  },
+	  openStudentAnswerModal: function openStudentAnswerModal() {
+	    this.setState({ showStudentAnswerModal: true });
+	  },
+	  closeStudentAnswerModal: function closeStudentAnswerModal() {
+	    this.setState({ showStudentAnswerModal: false });
+	  },
 	
 	
 	  render: function render() {
 	    if (typeof this.props.answers === "undefined" || this.props.answers.length === 0) {
-	      return React.createElement('div', null);
+	      return React.createElement(
+	        'div',
+	        null,
+	        React.createElement(
+	          Panel,
+	          { header: 'Student Answer' },
+	          React.createElement(
+	            Button,
+	            { bsStyle: 'primary', bsSize: 'large', block: true, onClick: this.openStudentAnswerModal },
+	            'Start Answer'
+	          )
+	        ),
+	        React.createElement(
+	          Modal,
+	          { show: this.state.showStudentAnswerModal, onHide: this.closeStudentAnswerModal },
+	          React.createElement(
+	            Modal.Header,
+	            { closeButton: true },
+	            React.createElement(
+	              Modal.Title,
+	              null,
+	              'Student Answer'
+	            ),
+	            React.createElement(StudentAnswerForm, { close: this.closeStudentAnswerModal, answer: { response: '', post_id: 0 } })
+	          )
+	        )
+	      );
+	    } else {
+	      return React.createElement(
+	        'div',
+	        null,
+	        React.createElement(
+	          Panel,
+	          { header: 'Student Answer' },
+	          this.props.answers[this.props.answers.length - 1].response,
+	          React.createElement(
+	            Button,
+	            { bsStyle: 'primary', bsSize: 'large', block: true, onClick: this.openStudentAnswerModal },
+	            'Continue Answer'
+	          )
+	        ),
+	        React.createElement(
+	          Modal,
+	          { show: this.state.showStudentAnswerModal, onHide: this.closeStudentAnswerModal },
+	          React.createElement(
+	            Modal.Header,
+	            { closeButton: true },
+	            React.createElement(
+	              Modal.Title,
+	              null,
+	              'Student Answer'
+	            ),
+	            React.createElement(StudentAnswerForm, { close: this.closeStudentAnswerModal, answer: this.props.answers[this.props.answers.length - 1] })
+	          )
+	        )
+	      );
 	    }
-	
-	    return React.createElement(
-	      'div',
-	      null,
-	      ' ',
-	      this.props.answers[this.props.answers.length - 1].response,
-	      ' '
-	    );
 	  }
 	});
 	
 	module.exports = PostStudentAnswer;
+
+/***/ },
+/* 551 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	var ReactDOM = __webpack_require__(38);
+	var PostActions = __webpack_require__(259);
+	var PostStore = __webpack_require__(256);
+	var AnswerActions = __webpack_require__(552);
+	
+	var FormGroup = __webpack_require__(261).FormGroup;
+	var FormControl = __webpack_require__(261).FormControl;
+	var ControlLabel = __webpack_require__(261).ControlLabel;
+	var Button = __webpack_require__(261).Button;
+	
+	var StudentAnswerForm = React.createClass({
+	  displayName: 'StudentAnswerForm',
+	
+	  getInitialState: function getInitialState() {
+	    console.log(this.props.answer);
+	    return {
+	      response: this.props.answer.response,
+	      post_id: this.props.answer.post_id,
+	      answer_type: 0
+	    };
+	  },
+	
+	  componentDidMount: function componentDidMount() {
+	    var self = this;
+	    setTimeout(function () {
+	      ReactDOM.findDOMNode(self.refs.autoFocus).focus();
+	    }, 500);
+	  },
+	
+	  responseChange: function responseChange(e) {
+	    e.preventDefault();
+	    this.setState({ response: e.target.value });
+	  },
+	
+	  submitHandler: function submitHandler(e) {
+	    e.preventDefault();
+	
+	    AnswerActions.createAnswer({
+	      response: this.state.response,
+	      post_id: this.state.post_id,
+	      answer_type: 0
+	    });
+	
+	    this.props.close();
+	  },
+	
+	  render: function render() {
+	    return React.createElement(
+	      'form',
+	      { className: 'answer-form', onSubmit: this.submitHandler },
+	      React.createElement(
+	        FormGroup,
+	        { controlId: 'response' },
+	        React.createElement(FormControl, {
+	          componentClass: 'textarea',
+	          value: this.state.response,
+	          onChange: this.responseChange,
+	          ref: 'autoFocus'
+	        })
+	      ),
+	      React.createElement(
+	        Button,
+	        { type: 'submit' },
+	        'Submit'
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = StudentAnswerForm;
+
+/***/ },
+/* 552 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var PostApi = __webpack_require__(260);
+	var Dispatcher = __webpack_require__(249);
+	var PostConstants = __webpack_require__(257);
+	var PostActions = __webpack_require__(259);
+	
+	module.exports = {
+	  createAnswer: function createAnswer(answer) {
+	    PostApi.createAnswer(answer, PostActions.receivePost);
+	  }
+	};
 
 /***/ }
 /******/ ]);

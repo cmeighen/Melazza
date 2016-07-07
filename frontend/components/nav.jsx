@@ -12,7 +12,7 @@ const hashHistory = require('react-router').hashHistory;
 const UserActions = require('../actions/userActions');
 
 
-var Navigation = React.createClass({
+const Navigation = React.createClass({
 
   getInitialState() {
     return {

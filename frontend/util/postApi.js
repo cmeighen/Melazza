@@ -61,6 +61,27 @@ const postApi = {
         success(response);
       }
     });
+  },
+
+  createComment: function(comment, success) {
+    $.ajax({
+      type: 'POST',
+      url: 'api/comments',
+      data: {comment: comment},
+      success: function(response) {
+        success(response);
+      }
+    });
+  },
+
+  deleteComment: function(commentId, success) {
+    $.ajax({
+      type: 'DELETE',
+      url: 'api/comments/' + commentId.toString(),
+      success: function(response) {
+        success(response);
+      }
+    });
   }
 };
 

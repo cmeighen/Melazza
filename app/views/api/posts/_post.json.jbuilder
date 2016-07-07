@@ -9,3 +9,11 @@ if show_answers
     end
   end
 end
+
+if show_comments
+  json.comments do
+    json.array!(post.comments) do |comment|
+      json.partial! 'api/comments/comment', comment: comment
+    end
+  end
+end

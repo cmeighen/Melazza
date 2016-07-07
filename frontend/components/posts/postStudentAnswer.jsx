@@ -4,7 +4,7 @@ const PostActions = require('../../actions/postActions');
 const Modal = require('react-bootstrap').Modal;
 const Panel = require('react-bootstrap').Panel;
 const Button = require('react-bootstrap').Button;
-const StudentAnswerForm = require('./StudentAnswerForm');
+const StudentAnswerForm = require('./studentAnswerForm');
 
 
 const PostStudentAnswer = React.createClass({
@@ -33,7 +33,10 @@ const PostStudentAnswer = React.createClass({
           <Modal show={this.state.showStudentAnswerModal} onHide={this.closeStudentAnswerModal}>
             <Modal.Header closeButton>
               <Modal.Title>Student Answer</Modal.Title>
-              <StudentAnswerForm close={this.closeStudentAnswerModal} response="" postId={this.props.postId}/>
+              <StudentAnswerForm
+                close={this.closeStudentAnswerModal}
+                response=""
+                postId={this.props.postId}/>
             </Modal.Header>
           </Modal>
         </div>
@@ -48,7 +51,10 @@ const PostStudentAnswer = React.createClass({
           <Modal show={this.state.showStudentAnswerModal} onHide={this.closeStudentAnswerModal}>
             <Modal.Header closeButton>
               <Modal.Title>Student Answer</Modal.Title>
-              <StudentAnswerForm close={this.closeStudentAnswerModal} response={this.props.answers[this.props.answers.length - 1].response} postId={this.props.postId}/>
+              <StudentAnswerForm
+                close={this.closeStudentAnswerModal}
+                response={this.props.answers[this.props.answers.length - 1].response}
+                postId={this.props.postId}/>
             </Modal.Header>
           </Modal>
         </div>

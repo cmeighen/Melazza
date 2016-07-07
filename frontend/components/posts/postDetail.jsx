@@ -5,6 +5,8 @@ const Modal = require('react-bootstrap').Modal;
 const Panel = require('react-bootstrap').Panel;
 
 const StudentAnswer = require('./postStudentAnswer');
+const CommentIndex = require('./commentIndex');
+const CommentForm = require('./commentForm');
 
 const PostDetail = React.createClass({
   getInitialState: function(){
@@ -53,7 +55,8 @@ const PostDetail = React.createClass({
         <StudentAnswer answers={answers} postId={this.props.params.postId} />
         <div className="post-discussion">
           <Panel header="Discussion">
-            Reserved Space for Post Discussion
+            <CommentIndex comments={this.state.post.comments}/>
+            <CommentForm postId={this.props.params.postId} />
           </Panel>
         </div>
       </div>

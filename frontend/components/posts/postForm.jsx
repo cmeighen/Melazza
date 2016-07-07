@@ -9,7 +9,7 @@ const ControlLabel = require('react-bootstrap').ControlLabel;
 const Button = require('react-bootstrap').Button;
 
 
-var PostForm = React.createClass({
+const PostForm = React.createClass({
   getInitialState: function(){
     return {
       title: '',

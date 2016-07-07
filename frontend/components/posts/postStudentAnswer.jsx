@@ -33,7 +33,7 @@ const PostStudentAnswer = React.createClass({
           <Modal show={this.state.showStudentAnswerModal} onHide={this.closeStudentAnswerModal}>
             <Modal.Header closeButton>
               <Modal.Title>Student Answer</Modal.Title>
-              <StudentAnswerForm close={this.closeStudentAnswerModal} answer={{response: '', post_id: 0}}/>
+              <StudentAnswerForm close={this.closeStudentAnswerModal} response="" postId={this.props.postId}/>
             </Modal.Header>
           </Modal>
         </div>
@@ -48,7 +48,7 @@ const PostStudentAnswer = React.createClass({
           <Modal show={this.state.showStudentAnswerModal} onHide={this.closeStudentAnswerModal}>
             <Modal.Header closeButton>
               <Modal.Title>Student Answer</Modal.Title>
-              <StudentAnswerForm close={this.closeStudentAnswerModal} answer={this.props.answers[this.props.answers.length - 1]}/>
+              <StudentAnswerForm close={this.closeStudentAnswerModal} response={this.props.answers[this.props.answers.length - 1].response} postId={this.props.postId}/>
             </Modal.Header>
           </Modal>
         </div>

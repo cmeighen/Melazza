@@ -60,11 +60,11 @@
 	var PostStore = __webpack_require__(256);
 	var PostIndex = __webpack_require__(258);
 	var PostDetail = __webpack_require__(524);
-	var Modal = __webpack_require__(525);
-	var Nav = __webpack_require__(545);
-	var ClassRoom = __webpack_require__(547);
+	var Modal = __webpack_require__(528);
+	var Nav = __webpack_require__(548);
+	var ClassRoom = __webpack_require__(550);
 	
-	var WelcomePage = __webpack_require__(548);
+	var WelcomePage = __webpack_require__(551);
 	
 	window.hh = hashHistory;
 	window.ps = PostStore;
@@ -52366,7 +52366,7 @@
 	var Modal = __webpack_require__(261).Modal;
 	var Panel = __webpack_require__(261).Panel;
 	
-	var StudentAnswer = __webpack_require__(550);
+	var StudentAnswer = __webpack_require__(525);
 	
 	var PostDetail = React.createClass({
 	  displayName: 'PostDetail',
@@ -52428,7 +52428,7 @@
 	          this.state.post.body
 	        )
 	      ),
-	      React.createElement(StudentAnswer, { answers: answers }),
+	      React.createElement(StudentAnswer, { answers: answers, postId: this.props.params.postId }),
 	      React.createElement(
 	        'div',
 	        { className: 'post-discussion' },
@@ -52448,22 +52448,209 @@
 /* 525 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(526);
+	'use strict';
 	
-
+	var React = __webpack_require__(1);
+	var PostStore = __webpack_require__(256);
+	var PostActions = __webpack_require__(259);
+	var Modal = __webpack_require__(261).Modal;
+	var Panel = __webpack_require__(261).Panel;
+	var Button = __webpack_require__(261).Button;
+	var StudentAnswerForm = __webpack_require__(526);
+	
+	var PostStudentAnswer = React.createClass({
+	  displayName: 'PostStudentAnswer',
+	  getInitialState: function getInitialState() {
+	    return {
+	      showStudentAnswerModal: false
+	    };
+	  },
+	  openStudentAnswerModal: function openStudentAnswerModal() {
+	    this.setState({ showStudentAnswerModal: true });
+	  },
+	  closeStudentAnswerModal: function closeStudentAnswerModal() {
+	    this.setState({ showStudentAnswerModal: false });
+	  },
+	
+	
+	  render: function render() {
+	    if (typeof this.props.answers === "undefined" || this.props.answers.length === 0) {
+	      return React.createElement(
+	        'div',
+	        null,
+	        React.createElement(
+	          Panel,
+	          { header: 'Student Answer' },
+	          React.createElement(
+	            Button,
+	            { bsStyle: 'primary', bsSize: 'large', block: true, onClick: this.openStudentAnswerModal },
+	            'Start Answer'
+	          )
+	        ),
+	        React.createElement(
+	          Modal,
+	          { show: this.state.showStudentAnswerModal, onHide: this.closeStudentAnswerModal },
+	          React.createElement(
+	            Modal.Header,
+	            { closeButton: true },
+	            React.createElement(
+	              Modal.Title,
+	              null,
+	              'Student Answer'
+	            ),
+	            React.createElement(StudentAnswerForm, { close: this.closeStudentAnswerModal, response: '', postId: this.props.postId })
+	          )
+	        )
+	      );
+	    } else {
+	      return React.createElement(
+	        'div',
+	        null,
+	        React.createElement(
+	          Panel,
+	          { header: 'Student Answer' },
+	          this.props.answers[this.props.answers.length - 1].response,
+	          React.createElement(
+	            Button,
+	            { bsStyle: 'primary', bsSize: 'large', block: true, onClick: this.openStudentAnswerModal },
+	            'Continue Answer'
+	          )
+	        ),
+	        React.createElement(
+	          Modal,
+	          { show: this.state.showStudentAnswerModal, onHide: this.closeStudentAnswerModal },
+	          React.createElement(
+	            Modal.Header,
+	            { closeButton: true },
+	            React.createElement(
+	              Modal.Title,
+	              null,
+	              'Student Answer'
+	            ),
+	            React.createElement(StudentAnswerForm, { close: this.closeStudentAnswerModal, response: this.props.answers[this.props.answers.length - 1].response, postId: this.props.postId })
+	          )
+	        )
+	      );
+	    }
+	  }
+	});
+	
+	module.exports = PostStudentAnswer;
 
 /***/ },
 /* 526 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	var ReactDOM = __webpack_require__(38);
+	var PostActions = __webpack_require__(259);
+	var PostStore = __webpack_require__(256);
+	var AnswerActions = __webpack_require__(527);
+	
+	var FormGroup = __webpack_require__(261).FormGroup;
+	var FormControl = __webpack_require__(261).FormControl;
+	var ControlLabel = __webpack_require__(261).ControlLabel;
+	var Button = __webpack_require__(261).Button;
+	
+	var StudentAnswerForm = React.createClass({
+	  displayName: 'StudentAnswerForm',
+	
+	  getInitialState: function getInitialState() {
+	    return {
+	      response: this.props.response,
+	      post_id: this.props.postId,
+	      answer_type: 0
+	    };
+	  },
+	
+	  componentDidMount: function componentDidMount() {
+	    var self = this;
+	    setTimeout(function () {
+	      ReactDOM.findDOMNode(self.refs.autoFocus).focus();
+	    }, 500);
+	  },
+	
+	  responseChange: function responseChange(e) {
+	    e.preventDefault();
+	    this.setState({ response: e.target.value });
+	  },
+	
+	  submitHandler: function submitHandler(e) {
+	    e.preventDefault();
+	
+	    AnswerActions.createAnswer({
+	      response: this.state.response,
+	      post_id: this.state.post_id,
+	      answer_type: 0
+	    });
+	
+	    this.props.close();
+	  },
+	
+	  render: function render() {
+	    return React.createElement(
+	      'form',
+	      { className: 'answer-form', onSubmit: this.submitHandler },
+	      React.createElement(
+	        FormGroup,
+	        { controlId: 'response' },
+	        React.createElement(FormControl, {
+	          componentClass: 'textarea',
+	          value: this.state.response,
+	          onChange: this.responseChange,
+	          ref: 'autoFocus'
+	        })
+	      ),
+	      React.createElement(
+	        Button,
+	        { type: 'submit' },
+	        'Submit'
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = StudentAnswerForm;
+
+/***/ },
+/* 527 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var PostApi = __webpack_require__(260);
+	var Dispatcher = __webpack_require__(249);
+	var PostConstants = __webpack_require__(257);
+	var PostActions = __webpack_require__(259);
+	
+	module.exports = {
+	  createAnswer: function createAnswer(answer) {
+	    PostApi.createAnswer(answer, PostActions.receivePost);
+	  }
+	};
+
+/***/ },
+/* 528 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(529);
+	
+
+
+/***/ },
+/* 529 */
+/***/ function(module, exports, __webpack_require__) {
+
 	/* WEBPACK VAR INJECTION */(function(process) {var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(38);
-	var ExecutionEnvironment = __webpack_require__(527);
-	var ModalPortal = React.createFactory(__webpack_require__(528));
-	var ariaAppHider = __webpack_require__(543);
-	var elementClass = __webpack_require__(544);
+	var ExecutionEnvironment = __webpack_require__(530);
+	var ModalPortal = React.createFactory(__webpack_require__(531));
+	var ariaAppHider = __webpack_require__(546);
+	var elementClass = __webpack_require__(547);
 	var renderSubtreeIntoContainer = __webpack_require__(38).unstable_renderSubtreeIntoContainer;
-	var Assign = __webpack_require__(532);
+	var Assign = __webpack_require__(535);
 	
 	var SafeHTMLElement = ExecutionEnvironment.canUseDOM ? window.HTMLElement : {};
 	var AppElement = ExecutionEnvironment.canUseDOM ? document.body : {appendChild: function() {}};
@@ -52571,7 +52758,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 527 */
+/* 530 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -52616,14 +52803,14 @@
 
 
 /***/ },
-/* 528 */
+/* 531 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var div = React.DOM.div;
-	var focusManager = __webpack_require__(529);
-	var scopeTab = __webpack_require__(531);
-	var Assign = __webpack_require__(532);
+	var focusManager = __webpack_require__(532);
+	var scopeTab = __webpack_require__(534);
+	var Assign = __webpack_require__(535);
 	
 	// so that our CSS is statically analyzable
 	var CLASS_NAMES = {
@@ -52808,10 +52995,10 @@
 
 
 /***/ },
-/* 529 */
+/* 532 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var findTabbable = __webpack_require__(530);
+	var findTabbable = __webpack_require__(533);
 	var modalElement = null;
 	var focusLaterElement = null;
 	var needToFocus = false;
@@ -52882,7 +53069,7 @@
 
 
 /***/ },
-/* 530 */
+/* 533 */
 /***/ function(module, exports) {
 
 	/*!
@@ -52938,10 +53125,10 @@
 
 
 /***/ },
-/* 531 */
+/* 534 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var findTabbable = __webpack_require__(530);
+	var findTabbable = __webpack_require__(533);
 	
 	module.exports = function(node, event) {
 	  var tabbable = findTabbable(node);
@@ -52963,7 +53150,7 @@
 
 
 /***/ },
-/* 532 */
+/* 535 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -52974,9 +53161,9 @@
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var baseAssign = __webpack_require__(533),
-	    createAssigner = __webpack_require__(539),
-	    keys = __webpack_require__(535);
+	var baseAssign = __webpack_require__(536),
+	    createAssigner = __webpack_require__(542),
+	    keys = __webpack_require__(538);
 	
 	/**
 	 * A specialized version of `_.assign` for customizing assigned values without
@@ -53049,7 +53236,7 @@
 
 
 /***/ },
-/* 533 */
+/* 536 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -53060,8 +53247,8 @@
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var baseCopy = __webpack_require__(534),
-	    keys = __webpack_require__(535);
+	var baseCopy = __webpack_require__(537),
+	    keys = __webpack_require__(538);
 	
 	/**
 	 * The base implementation of `_.assign` without support for argument juggling,
@@ -53082,7 +53269,7 @@
 
 
 /***/ },
-/* 534 */
+/* 537 */
 /***/ function(module, exports) {
 
 	/**
@@ -53120,7 +53307,7 @@
 
 
 /***/ },
-/* 535 */
+/* 538 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -53131,9 +53318,9 @@
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var getNative = __webpack_require__(536),
-	    isArguments = __webpack_require__(537),
-	    isArray = __webpack_require__(538);
+	var getNative = __webpack_require__(539),
+	    isArguments = __webpack_require__(540),
+	    isArray = __webpack_require__(541);
 	
 	/** Used to detect unsigned integer values. */
 	var reIsUint = /^\d+$/;
@@ -53362,7 +53549,7 @@
 
 
 /***/ },
-/* 536 */
+/* 539 */
 /***/ function(module, exports) {
 
 	/**
@@ -53505,7 +53692,7 @@
 
 
 /***/ },
-/* 537 */
+/* 540 */
 /***/ function(module, exports) {
 
 	/**
@@ -53754,7 +53941,7 @@
 
 
 /***/ },
-/* 538 */
+/* 541 */
 /***/ function(module, exports) {
 
 	/**
@@ -53940,7 +54127,7 @@
 
 
 /***/ },
-/* 539 */
+/* 542 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -53951,9 +54138,9 @@
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var bindCallback = __webpack_require__(540),
-	    isIterateeCall = __webpack_require__(541),
-	    restParam = __webpack_require__(542);
+	var bindCallback = __webpack_require__(543),
+	    isIterateeCall = __webpack_require__(544),
+	    restParam = __webpack_require__(545);
 	
 	/**
 	 * Creates a function that assigns properties of source object(s) to a given
@@ -53998,7 +54185,7 @@
 
 
 /***/ },
-/* 540 */
+/* 543 */
 /***/ function(module, exports) {
 
 	/**
@@ -54069,7 +54256,7 @@
 
 
 /***/ },
-/* 541 */
+/* 544 */
 /***/ function(module, exports) {
 
 	/**
@@ -54207,7 +54394,7 @@
 
 
 /***/ },
-/* 542 */
+/* 545 */
 /***/ function(module, exports) {
 
 	/**
@@ -54280,7 +54467,7 @@
 
 
 /***/ },
-/* 543 */
+/* 546 */
 /***/ function(module, exports) {
 
 	var _element = typeof document !== 'undefined' ? document.body : null;
@@ -54328,7 +54515,7 @@
 
 
 /***/ },
-/* 544 */
+/* 547 */
 /***/ function(module, exports) {
 
 	module.exports = function(opts) {
@@ -54393,7 +54580,7 @@
 
 
 /***/ },
-/* 545 */
+/* 548 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -54405,7 +54592,7 @@
 	var NavItem = __webpack_require__(261).NavItem;
 	var Modal = __webpack_require__(261).Modal;
 	
-	var PostForm = __webpack_require__(546);
+	var PostForm = __webpack_require__(549);
 	
 	var hashHistory = __webpack_require__(168).hashHistory;
 	
@@ -54483,7 +54670,7 @@
 	module.exports = Navigation;
 
 /***/ },
-/* 546 */
+/* 549 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -54597,13 +54784,13 @@
 	module.exports = PostForm;
 
 /***/ },
-/* 547 */
+/* 550 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var React = __webpack_require__(1);
-	var Nav = __webpack_require__(545);
+	var Nav = __webpack_require__(548);
 	var PostIndex = __webpack_require__(258);
 	
 	var ClassRoom = React.createClass({
@@ -54629,13 +54816,13 @@
 	module.exports = ClassRoom;
 
 /***/ },
-/* 548 */
+/* 551 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var React = __webpack_require__(1);
-	var LogIn = __webpack_require__(549);
+	var LogIn = __webpack_require__(552);
 	
 	var Jumbotron = __webpack_require__(261).Jumbotron;
 	var Modal = __webpack_require__(261).Modal;
@@ -54697,7 +54884,7 @@
 	module.exports = WelcomePage;
 
 /***/ },
-/* 549 */
+/* 552 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -54830,194 +55017,6 @@
 	});
 	
 	module.exports = Login;
-
-/***/ },
-/* 550 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var React = __webpack_require__(1);
-	var PostStore = __webpack_require__(256);
-	var PostActions = __webpack_require__(259);
-	var Modal = __webpack_require__(261).Modal;
-	var Panel = __webpack_require__(261).Panel;
-	var Button = __webpack_require__(261).Button;
-	var StudentAnswerForm = __webpack_require__(551);
-	
-	var PostStudentAnswer = React.createClass({
-	  displayName: 'PostStudentAnswer',
-	  getInitialState: function getInitialState() {
-	    return {
-	      showStudentAnswerModal: false
-	    };
-	  },
-	  openStudentAnswerModal: function openStudentAnswerModal() {
-	    this.setState({ showStudentAnswerModal: true });
-	  },
-	  closeStudentAnswerModal: function closeStudentAnswerModal() {
-	    this.setState({ showStudentAnswerModal: false });
-	  },
-	
-	
-	  render: function render() {
-	    if (typeof this.props.answers === "undefined" || this.props.answers.length === 0) {
-	      return React.createElement(
-	        'div',
-	        null,
-	        React.createElement(
-	          Panel,
-	          { header: 'Student Answer' },
-	          React.createElement(
-	            Button,
-	            { bsStyle: 'primary', bsSize: 'large', block: true, onClick: this.openStudentAnswerModal },
-	            'Start Answer'
-	          )
-	        ),
-	        React.createElement(
-	          Modal,
-	          { show: this.state.showStudentAnswerModal, onHide: this.closeStudentAnswerModal },
-	          React.createElement(
-	            Modal.Header,
-	            { closeButton: true },
-	            React.createElement(
-	              Modal.Title,
-	              null,
-	              'Student Answer'
-	            ),
-	            React.createElement(StudentAnswerForm, { close: this.closeStudentAnswerModal, answer: { response: '', post_id: 0 } })
-	          )
-	        )
-	      );
-	    } else {
-	      return React.createElement(
-	        'div',
-	        null,
-	        React.createElement(
-	          Panel,
-	          { header: 'Student Answer' },
-	          this.props.answers[this.props.answers.length - 1].response,
-	          React.createElement(
-	            Button,
-	            { bsStyle: 'primary', bsSize: 'large', block: true, onClick: this.openStudentAnswerModal },
-	            'Continue Answer'
-	          )
-	        ),
-	        React.createElement(
-	          Modal,
-	          { show: this.state.showStudentAnswerModal, onHide: this.closeStudentAnswerModal },
-	          React.createElement(
-	            Modal.Header,
-	            { closeButton: true },
-	            React.createElement(
-	              Modal.Title,
-	              null,
-	              'Student Answer'
-	            ),
-	            React.createElement(StudentAnswerForm, { close: this.closeStudentAnswerModal, answer: this.props.answers[this.props.answers.length - 1] })
-	          )
-	        )
-	      );
-	    }
-	  }
-	});
-	
-	module.exports = PostStudentAnswer;
-
-/***/ },
-/* 551 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var React = __webpack_require__(1);
-	var ReactDOM = __webpack_require__(38);
-	var PostActions = __webpack_require__(259);
-	var PostStore = __webpack_require__(256);
-	var AnswerActions = __webpack_require__(552);
-	
-	var FormGroup = __webpack_require__(261).FormGroup;
-	var FormControl = __webpack_require__(261).FormControl;
-	var ControlLabel = __webpack_require__(261).ControlLabel;
-	var Button = __webpack_require__(261).Button;
-	
-	var StudentAnswerForm = React.createClass({
-	  displayName: 'StudentAnswerForm',
-	
-	  getInitialState: function getInitialState() {
-	    console.log(this.props.answer);
-	    return {
-	      response: this.props.answer.response,
-	      post_id: this.props.answer.post_id,
-	      answer_type: 0
-	    };
-	  },
-	
-	  componentDidMount: function componentDidMount() {
-	    var self = this;
-	    setTimeout(function () {
-	      ReactDOM.findDOMNode(self.refs.autoFocus).focus();
-	    }, 500);
-	  },
-	
-	  responseChange: function responseChange(e) {
-	    e.preventDefault();
-	    this.setState({ response: e.target.value });
-	  },
-	
-	  submitHandler: function submitHandler(e) {
-	    e.preventDefault();
-	
-	    AnswerActions.createAnswer({
-	      response: this.state.response,
-	      post_id: this.state.post_id,
-	      answer_type: 0
-	    });
-	
-	    this.props.close();
-	  },
-	
-	  render: function render() {
-	    return React.createElement(
-	      'form',
-	      { className: 'answer-form', onSubmit: this.submitHandler },
-	      React.createElement(
-	        FormGroup,
-	        { controlId: 'response' },
-	        React.createElement(FormControl, {
-	          componentClass: 'textarea',
-	          value: this.state.response,
-	          onChange: this.responseChange,
-	          ref: 'autoFocus'
-	        })
-	      ),
-	      React.createElement(
-	        Button,
-	        { type: 'submit' },
-	        'Submit'
-	      )
-	    );
-	  }
-	});
-	
-	module.exports = StudentAnswerForm;
-
-/***/ },
-/* 552 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var PostApi = __webpack_require__(260);
-	var Dispatcher = __webpack_require__(249);
-	var PostConstants = __webpack_require__(257);
-	var PostActions = __webpack_require__(259);
-	
-	module.exports = {
-	  createAnswer: function createAnswer(answer) {
-	    PostApi.createAnswer(answer, PostActions.receivePost);
-	  }
-	};
 
 /***/ }
 /******/ ]);

@@ -5,6 +5,7 @@ const Modal = require('react-bootstrap').Modal;
 const Panel = require('react-bootstrap').Panel;
 const Button = require('react-bootstrap').Button;
 const StudentAnswerForm = require('./studentAnswerForm');
+const Well = require('react-bootstrap').Well;
 
 
 const PostStudentAnswer = React.createClass({
@@ -27,7 +28,7 @@ const PostStudentAnswer = React.createClass({
     if (typeof this.props.answers === "undefined" || this.props.answers.length === 0) {
       return(
         <div>
-          <Panel header="Student Answer">
+          <Panel header="Answer">
             <Button bsStyle="primary" bsSize="large" block onClick={this.openStudentAnswerModal}>Start Answer</Button>
           </Panel>
           <Modal show={this.state.showStudentAnswerModal} onHide={this.closeStudentAnswerModal}>
@@ -44,8 +45,8 @@ const PostStudentAnswer = React.createClass({
     } else {
       return(
         <div>
-          <Panel header="Student Answer">
-            { this.props.answers[this.props.answers.length - 1].response }
+          <Panel header="Answer">
+            <Well bsSize="large">{ this.props.answers[this.props.answers.length - 1].response }</Well>
             <Button bsStyle="primary" bsSize="large" block onClick={this.openStudentAnswerModal}>Continue Answer</Button>
           </Panel>
           <Modal show={this.state.showStudentAnswerModal} onHide={this.closeStudentAnswerModal}>

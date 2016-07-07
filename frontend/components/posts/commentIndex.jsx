@@ -8,7 +8,7 @@ const CommentIndex = React.createClass({
     const comments = this.props.comments;
     if (typeof comments === "undefined" || comments.length === 0) {
       return(
-        <div>No Comments</div>
+        <div></div>
       );
     }
 

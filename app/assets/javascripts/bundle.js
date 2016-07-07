@@ -33185,6 +33185,27 @@
 	        _success6(response);
 	      }
 	    });
+	  },
+	
+	  createComment: function createComment(comment, _success7) {
+	    $.ajax({
+	      type: 'POST',
+	      url: 'api/comments',
+	      data: { comment: comment },
+	      success: function success(response) {
+	        _success7(response);
+	      }
+	    });
+	  },
+	
+	  deleteComment: function deleteComment(commentId, _success8) {
+	    $.ajax({
+	      type: 'DELETE',
+	      url: 'api/comments/' + commentId.toString(),
+	      success: function success(response) {
+	        _success8(response);
+	      }
+	    });
 	  }
 	};
 	
@@ -52456,7 +52477,7 @@
 	var Modal = __webpack_require__(261).Modal;
 	var Panel = __webpack_require__(261).Panel;
 	var Button = __webpack_require__(261).Button;
-	var StudentAnswerForm = __webpack_require__(526);
+	var StudentAnswerForm = __webpack_require__(553);
 	
 	var PostStudentAnswer = React.createClass({
 	  displayName: 'PostStudentAnswer',
@@ -52498,7 +52519,10 @@
 	              null,
 	              'Student Answer'
 	            ),
-	            React.createElement(StudentAnswerForm, { close: this.closeStudentAnswerModal, response: '', postId: this.props.postId })
+	            React.createElement(StudentAnswerForm, {
+	              close: this.closeStudentAnswerModal,
+	              response: '',
+	              postId: this.props.postId })
 	          )
 	        )
 	      );
@@ -52527,7 +52551,10 @@
 	              null,
 	              'Student Answer'
 	            ),
-	            React.createElement(StudentAnswerForm, { close: this.closeStudentAnswerModal, response: this.props.answers[this.props.answers.length - 1].response, postId: this.props.postId })
+	            React.createElement(StudentAnswerForm, {
+	              close: this.closeStudentAnswerModal,
+	              response: this.props.answers[this.props.answers.length - 1].response,
+	              postId: this.props.postId })
 	          )
 	        )
 	      );
@@ -52538,83 +52565,7 @@
 	module.exports = PostStudentAnswer;
 
 /***/ },
-/* 526 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var React = __webpack_require__(1);
-	var ReactDOM = __webpack_require__(38);
-	var PostActions = __webpack_require__(259);
-	var PostStore = __webpack_require__(256);
-	var AnswerActions = __webpack_require__(527);
-	
-	var FormGroup = __webpack_require__(261).FormGroup;
-	var FormControl = __webpack_require__(261).FormControl;
-	var ControlLabel = __webpack_require__(261).ControlLabel;
-	var Button = __webpack_require__(261).Button;
-	
-	var StudentAnswerForm = React.createClass({
-	  displayName: 'StudentAnswerForm',
-	
-	  getInitialState: function getInitialState() {
-	    return {
-	      response: this.props.response,
-	      post_id: this.props.postId,
-	      answer_type: 0
-	    };
-	  },
-	
-	  componentDidMount: function componentDidMount() {
-	    var self = this;
-	    setTimeout(function () {
-	      ReactDOM.findDOMNode(self.refs.autoFocus).focus();
-	    }, 500);
-	  },
-	
-	  responseChange: function responseChange(e) {
-	    e.preventDefault();
-	    this.setState({ response: e.target.value });
-	  },
-	
-	  submitHandler: function submitHandler(e) {
-	    e.preventDefault();
-	
-	    AnswerActions.createAnswer({
-	      response: this.state.response,
-	      post_id: this.state.post_id,
-	      answer_type: 0
-	    });
-	
-	    this.props.close();
-	  },
-	
-	  render: function render() {
-	    return React.createElement(
-	      'form',
-	      { className: 'answer-form', onSubmit: this.submitHandler },
-	      React.createElement(
-	        FormGroup,
-	        { controlId: 'response' },
-	        React.createElement(FormControl, {
-	          componentClass: 'textarea',
-	          value: this.state.response,
-	          onChange: this.responseChange,
-	          ref: 'autoFocus'
-	        })
-	      ),
-	      React.createElement(
-	        Button,
-	        { type: 'submit' },
-	        'Submit'
-	      )
-	    );
-	  }
-	});
-	
-	module.exports = StudentAnswerForm;
-
-/***/ },
+/* 526 */,
 /* 527 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -55017,6 +54968,83 @@
 	});
 	
 	module.exports = Login;
+
+/***/ },
+/* 553 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	var ReactDOM = __webpack_require__(38);
+	var PostActions = __webpack_require__(259);
+	var PostStore = __webpack_require__(256);
+	var AnswerActions = __webpack_require__(527);
+	
+	var FormGroup = __webpack_require__(261).FormGroup;
+	var FormControl = __webpack_require__(261).FormControl;
+	var ControlLabel = __webpack_require__(261).ControlLabel;
+	var Button = __webpack_require__(261).Button;
+	
+	var StudentAnswerForm = React.createClass({
+	  displayName: 'StudentAnswerForm',
+	
+	  getInitialState: function getInitialState() {
+	    return {
+	      response: this.props.response,
+	      post_id: this.props.postId,
+	      answer_type: 0
+	    };
+	  },
+	
+	  componentDidMount: function componentDidMount() {
+	    var self = this;
+	    setTimeout(function () {
+	      ReactDOM.findDOMNode(self.refs.autoFocus).focus();
+	    }, 500);
+	  },
+	
+	  responseChange: function responseChange(e) {
+	    e.preventDefault();
+	    this.setState({ response: e.target.value });
+	  },
+	
+	  submitHandler: function submitHandler(e) {
+	    e.preventDefault();
+	
+	    AnswerActions.createAnswer({
+	      response: this.state.response,
+	      post_id: this.state.post_id,
+	      answer_type: 0
+	    });
+	
+	    this.props.close();
+	  },
+	
+	  render: function render() {
+	    return React.createElement(
+	      'form',
+	      { className: 'answer-form', onSubmit: this.submitHandler },
+	      React.createElement(
+	        FormGroup,
+	        { controlId: 'response' },
+	        React.createElement(FormControl, {
+	          componentClass: 'textarea',
+	          value: this.state.response,
+	          onChange: this.responseChange,
+	          ref: 'autoFocus'
+	        })
+	      ),
+	      React.createElement(
+	        Button,
+	        { type: 'submit' },
+	        'Submit'
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = StudentAnswerForm;
 
 /***/ }
 /******/ ]);

@@ -1,6 +1,5 @@
 const React = require('react');
 const hashHistory = require('react-router').hashHistory;
-const UserActions = require('../../actions/userActions');
 const PostStore = require('../../stores/postStore');
 const PostActions = require('../../actions/postActions');
 

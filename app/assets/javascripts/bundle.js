@@ -32994,7 +32994,6 @@
 	
 	var React = __webpack_require__(1);
 	var hashHistory = __webpack_require__(168).hashHistory;
-	var UserActions = __webpack_require__(253);
 	var PostStore = __webpack_require__(256);
 	var PostActions = __webpack_require__(259);
 	
@@ -52388,6 +52387,8 @@
 	var Panel = __webpack_require__(261).Panel;
 	
 	var StudentAnswer = __webpack_require__(525);
+	var CommentIndex = __webpack_require__(554);
+	var CommentForm = __webpack_require__(555);
 	
 	var PostDetail = React.createClass({
 	  displayName: 'PostDetail',
@@ -52456,7 +52457,8 @@
 	        React.createElement(
 	          Panel,
 	          { header: 'Discussion' },
-	          'Reserved Space for Post Discussion'
+	          React.createElement(CommentIndex, { comments: this.state.post.comments }),
+	          React.createElement(CommentForm, { postId: this.props.params.postId })
 	        )
 	      )
 	    );
@@ -55045,6 +55047,140 @@
 	});
 	
 	module.exports = StudentAnswerForm;
+
+/***/ },
+/* 554 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	var Well = __webpack_require__(261).Well;
+	
+	var CommentIndex = React.createClass({
+	  displayName: 'CommentIndex',
+	  render: function render() {
+	
+	    var comments = this.props.comments;
+	    if (typeof comments === "undefined" || comments.length === 0) {
+	      return React.createElement(
+	        'div',
+	        null,
+	        'No Comments'
+	      );
+	    }
+	
+	    return React.createElement(
+	      'div',
+	      { className: 'comments-index' },
+	      comments.map(function (comment) {
+	        return React.createElement(
+	          Well,
+	          { bsSize: 'large', key: comment.id },
+	          comment.comment
+	        );
+	      })
+	    );
+	  }
+	});
+	
+	module.exports = CommentIndex;
+
+/***/ },
+/* 555 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	var CommentActions = __webpack_require__(556);
+	var FormGroup = __webpack_require__(261).FormGroup;
+	var FormControl = __webpack_require__(261).FormControl;
+	var ControlLabel = __webpack_require__(261).ControlLabel;
+	var Button = __webpack_require__(261).Button;
+	
+	var CommentForm = React.createClass({
+	  displayName: 'CommentForm',
+	
+	  getInitialState: function getInitialState() {
+	    return {
+	      comment: '',
+	      post_id: this.props.postId
+	    };
+	  },
+	
+	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+	    this.setState({
+	      post_id: nextProps.postId
+	    });
+	  },
+	
+	  commentChange: function commentChange(e) {
+	    e.preventDefault();
+	    this.setState({ comment: e.target.value });
+	  },
+	
+	  submitHandler: function submitHandler(e) {
+	    e.preventDefault();
+	
+	    CommentActions.createComment({
+	      comment: this.state.comment,
+	      post_id: this.state.post_id
+	    });
+	
+	    this.setState({ comment: '' });
+	  },
+	
+	  render: function render() {
+	    return React.createElement(
+	      'form',
+	      { className: 'comment-form', onSubmit: this.submitHandler },
+	      React.createElement(
+	        FormGroup,
+	        { controlId: 'comment' },
+	        React.createElement(
+	          ControlLabel,
+	          null,
+	          'Comment:'
+	        ),
+	        React.createElement(FormControl, {
+	          componentClass: 'textarea',
+	          value: this.state.comment,
+	          onChange: this.commentChange,
+	          placeholder: 'Comment Here'
+	        })
+	      ),
+	      React.createElement(
+	        Button,
+	        { type: 'submit' },
+	        'Submit Comment'
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = CommentForm;
+
+/***/ },
+/* 556 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var PostApi = __webpack_require__(260);
+	var Dispatcher = __webpack_require__(249);
+	var PostConstants = __webpack_require__(257);
+	var PostActions = __webpack_require__(259);
+	
+	module.exports = {
+	  createComment: function createComment(comment) {
+	    PostApi.createComment(comment, PostActions.receivePost);
+	  },
+	  deleteComment: function deleteComment(commentId) {
+	    PostApi.deleteComment(commentId, PostActions.receivePost);
+	  }
+	};
 
 /***/ }
 /******/ ]);

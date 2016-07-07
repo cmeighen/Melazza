@@ -12,10 +12,9 @@ const Button = require('react-bootstrap').Button;
 
 const StudentAnswerForm = React.createClass({
   getInitialState: function(){
-    console.log(this.props.answer);
     return {
-      response: this.props.answer.response,
-      post_id: this.props.answer.post_id,
+      response: this.props.response,
+      post_id: this.props.postId,
       answer_type: 0
     };
   },

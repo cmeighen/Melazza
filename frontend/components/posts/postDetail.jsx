@@ -50,7 +50,7 @@ const PostDetail = React.createClass({
             {this.state.post.body}
           </Panel>
         </div>
-        <StudentAnswer answers={answers} />
+        <StudentAnswer answers={answers} postId={this.props.params.postId} />
         <div className="post-discussion">
           <Panel header="Discussion">
             Reserved Space for Post Discussion

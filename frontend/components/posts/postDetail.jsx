@@ -45,10 +45,10 @@ const PostDetail = React.createClass({
     return(
       <div className="post-container">
         <div className="post-details">
-          <Panel header="Post Details" id="post-details">
-            <h5>Summary</h5>
+          <Panel header="Question" id="post-details">
+            <h5>Description</h5>
             {this.state.post.title}
-            <h5>Body</h5>
+            <h5>Full Question</h5>
             {this.state.post.body}
           </Panel>
         </div>

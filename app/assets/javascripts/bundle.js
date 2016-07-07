@@ -52435,17 +52435,17 @@
 	        { className: 'post-details' },
 	        React.createElement(
 	          Panel,
-	          { header: 'Post Details', id: 'post-details' },
+	          { header: 'Question', id: 'post-details' },
 	          React.createElement(
 	            'h5',
 	            null,
-	            'Summary'
+	            'Description'
 	          ),
 	          this.state.post.title,
 	          React.createElement(
 	            'h5',
 	            null,
-	            'Body'
+	            'Full Question'
 	          ),
 	          this.state.post.body
 	        )
@@ -52480,6 +52480,7 @@
 	var Panel = __webpack_require__(261).Panel;
 	var Button = __webpack_require__(261).Button;
 	var StudentAnswerForm = __webpack_require__(553);
+	var Well = __webpack_require__(261).Well;
 	
 	var PostStudentAnswer = React.createClass({
 	  displayName: 'PostStudentAnswer',
@@ -52503,7 +52504,7 @@
 	        null,
 	        React.createElement(
 	          Panel,
-	          { header: 'Student Answer' },
+	          { header: 'Answer' },
 	          React.createElement(
 	            Button,
 	            { bsStyle: 'primary', bsSize: 'large', block: true, onClick: this.openStudentAnswerModal },
@@ -52534,8 +52535,12 @@
 	        null,
 	        React.createElement(
 	          Panel,
-	          { header: 'Student Answer' },
-	          this.props.answers[this.props.answers.length - 1].response,
+	          { header: 'Answer' },
+	          React.createElement(
+	            Well,
+	            { bsSize: 'large' },
+	            this.props.answers[this.props.answers.length - 1].response
+	          ),
 	          React.createElement(
 	            Button,
 	            { bsStyle: 'primary', bsSize: 'large', block: true, onClick: this.openStudentAnswerModal },
@@ -55063,11 +55068,7 @@
 	
 	    var comments = this.props.comments;
 	    if (typeof comments === "undefined" || comments.length === 0) {
-	      return React.createElement(
-	        'div',
-	        null,
-	        'No Comments'
-	      );
+	      return React.createElement('div', null);
 	    }
 	
 	    return React.createElement(

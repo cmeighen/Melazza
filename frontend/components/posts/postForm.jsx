@@ -1,7 +1,6 @@
 const React = require('react');
 const ReactDOM = require('react-dom');
 const PostActions = require('../../actions/postActions.js');
-const UserStore = require('../../stores/userStore');
 const PostStore = require('../../stores/postStore');
 
 const FormGroup = require('react-bootstrap').FormGroup;

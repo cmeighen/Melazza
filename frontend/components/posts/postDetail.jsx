@@ -50,11 +50,7 @@ const PostDetail = React.createClass({
             {this.state.post.body}
           </Panel>
         </div>
-        <div className="post-answer">
-          <Panel header="Student Answer">
-           <StudentAnswer answers={answers}/>
-          </Panel>
-        </div>
+        <StudentAnswer answers={answers} />
         <div className="post-discussion">
           <Panel header="Discussion">
             Reserved Space for Post Discussion

@@ -52681,7 +52681,8 @@
 	          componentClass: 'textarea',
 	          value: this.state.response,
 	          onChange: this.responseChange,
-	          ref: 'autoFocus'
+	          ref: 'autoFocus',
+	          placeholder: 'Begin The Answer Here'
 	        })
 	      ),
 	      React.createElement(

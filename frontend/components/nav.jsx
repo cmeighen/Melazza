@@ -16,7 +16,7 @@ const Navigation = React.createClass({
 
   getInitialState() {
     return {
-      showPostFormModal: false,
+      showPostFormModal: false
     };
   },
 

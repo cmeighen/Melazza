@@ -60,11 +60,11 @@
 	var PostStore = __webpack_require__(256);
 	var PostIndex = __webpack_require__(258);
 	var PostDetail = __webpack_require__(524);
-	var Modal = __webpack_require__(528);
-	var Nav = __webpack_require__(548);
-	var ClassRoom = __webpack_require__(550);
+	var Modal = __webpack_require__(531);
+	var Nav = __webpack_require__(551);
+	var ClassRoom = __webpack_require__(553);
 	
-	var WelcomePage = __webpack_require__(551);
+	var WelcomePage = __webpack_require__(554);
 	
 	window.hh = hashHistory;
 	window.ps = PostStore;
@@ -52385,17 +52385,21 @@
 	var PostActions = __webpack_require__(259);
 	var Modal = __webpack_require__(261).Modal;
 	var Panel = __webpack_require__(261).Panel;
+	var Button = __webpack_require__(261).Button;
+	var Well = __webpack_require__(261).Well;
 	
 	var StudentAnswer = __webpack_require__(525);
-	var CommentIndex = __webpack_require__(554);
-	var CommentForm = __webpack_require__(555);
+	var CommentIndex = __webpack_require__(528);
+	var CommentForm = __webpack_require__(529);
+	var PostForm = __webpack_require__(552);
 	
 	var PostDetail = React.createClass({
 	  displayName: 'PostDetail',
 	
 	  getInitialState: function getInitialState() {
 	    return {
-	      post: PostStore.find(this.props.params.postId)
+	      post: PostStore.find(this.props.params.postId),
+	      showPostFormModal: false
 	    };
 	  },
 	
@@ -52422,10 +52426,44 @@
 	  _onChange: function _onChange() {
 	    this.setState({ post: PostStore.find(this.props.params.postId) });
 	  },
+	  openPostForm: function openPostForm() {
+	    this.setState({ showPostFormModal: true });
+	  },
+	  closePostForm: function closePostForm() {
+	    this.setState({ showPostFormModal: false });
+	  },
 	
 	
 	  render: function render() {
 	    var answers = this.state.post.answers;
+	    var editPost = void 0;
+	    if (window.currentUser.id === this.state.post.author_id) {
+	      editPost = React.createElement(
+	        'div',
+	        null,
+	        React.createElement(
+	          Button,
+	          { bsStyle: 'primary', bsSize: 'large', block: true, onClick: this.openPostForm },
+	          'Edit Post'
+	        ),
+	        React.createElement(
+	          Modal,
+	          { show: this.state.showPostFormModal, onHide: this.closePostForm },
+	          React.createElement(
+	            Modal.Header,
+	            { closeButton: true },
+	            React.createElement(
+	              Modal.Title,
+	              null,
+	              'Edit Post'
+	            ),
+	            React.createElement(PostForm, { close: this.closePostForm, subType: 'update', post: this.state.post })
+	          )
+	        )
+	      );
+	    } else {
+	      editPost = React.createElement('div', null);
+	    }
 	
 	    return React.createElement(
 	      'div',
@@ -52441,13 +52479,22 @@
 	            null,
 	            'Description'
 	          ),
-	          this.state.post.title,
+	          React.createElement(
+	            Well,
+	            { bsSize: 'small' },
+	            this.state.post.title
+	          ),
 	          React.createElement(
 	            'h5',
 	            null,
 	            'Full Question'
 	          ),
-	          this.state.post.body
+	          React.createElement(
+	            Well,
+	            { bsSize: 'large' },
+	            this.state.post.body
+	          ),
+	          editPost
 	        )
 	      ),
 	      React.createElement(StudentAnswer, { answers: answers, postId: this.props.params.postId }),
@@ -52479,7 +52526,7 @@
 	var Modal = __webpack_require__(261).Modal;
 	var Panel = __webpack_require__(261).Panel;
 	var Button = __webpack_require__(261).Button;
-	var StudentAnswerForm = __webpack_require__(553);
+	var StudentAnswerForm = __webpack_require__(526);
 	var Well = __webpack_require__(261).Well;
 	
 	var PostStudentAnswer = React.createClass({
@@ -52572,7 +52619,83 @@
 	module.exports = PostStudentAnswer;
 
 /***/ },
-/* 526 */,
+/* 526 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	var ReactDOM = __webpack_require__(38);
+	var PostActions = __webpack_require__(259);
+	var PostStore = __webpack_require__(256);
+	var AnswerActions = __webpack_require__(527);
+	
+	var FormGroup = __webpack_require__(261).FormGroup;
+	var FormControl = __webpack_require__(261).FormControl;
+	var ControlLabel = __webpack_require__(261).ControlLabel;
+	var Button = __webpack_require__(261).Button;
+	
+	var StudentAnswerForm = React.createClass({
+	  displayName: 'StudentAnswerForm',
+	
+	  getInitialState: function getInitialState() {
+	    return {
+	      response: this.props.response,
+	      post_id: this.props.postId,
+	      answer_type: 0
+	    };
+	  },
+	
+	  componentDidMount: function componentDidMount() {
+	    var self = this;
+	    setTimeout(function () {
+	      ReactDOM.findDOMNode(self.refs.autoFocus).focus();
+	    }, 500);
+	  },
+	
+	  responseChange: function responseChange(e) {
+	    e.preventDefault();
+	    this.setState({ response: e.target.value });
+	  },
+	
+	  submitHandler: function submitHandler(e) {
+	    e.preventDefault();
+	
+	    AnswerActions.createAnswer({
+	      response: this.state.response,
+	      post_id: this.state.post_id,
+	      answer_type: 0
+	    });
+	
+	    this.props.close();
+	  },
+	
+	  render: function render() {
+	    return React.createElement(
+	      'form',
+	      { className: 'answer-form', onSubmit: this.submitHandler },
+	      React.createElement(
+	        FormGroup,
+	        { controlId: 'response' },
+	        React.createElement(FormControl, {
+	          componentClass: 'textarea',
+	          value: this.state.response,
+	          onChange: this.responseChange,
+	          ref: 'autoFocus'
+	        })
+	      ),
+	      React.createElement(
+	        Button,
+	        { type: 'submit' },
+	        'Submit'
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = StudentAnswerForm;
+
+/***/ },
 /* 527 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -52593,22 +52716,152 @@
 /* 528 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(529);
+	'use strict';
 	
-
+	var React = __webpack_require__(1);
+	var Well = __webpack_require__(261).Well;
+	
+	var CommentIndex = React.createClass({
+	  displayName: 'CommentIndex',
+	  render: function render() {
+	
+	    var comments = this.props.comments;
+	    if (typeof comments === "undefined" || comments.length === 0) {
+	      return React.createElement('div', null);
+	    }
+	
+	    return React.createElement(
+	      'div',
+	      { className: 'comments-index' },
+	      comments.map(function (comment) {
+	        return React.createElement(
+	          Well,
+	          { bsSize: 'large', key: comment.id },
+	          comment.comment
+	        );
+	      })
+	    );
+	  }
+	});
+	
+	module.exports = CommentIndex;
 
 /***/ },
 /* 529 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	var CommentActions = __webpack_require__(530);
+	var FormGroup = __webpack_require__(261).FormGroup;
+	var FormControl = __webpack_require__(261).FormControl;
+	var ControlLabel = __webpack_require__(261).ControlLabel;
+	var Button = __webpack_require__(261).Button;
+	
+	var CommentForm = React.createClass({
+	  displayName: 'CommentForm',
+	
+	  getInitialState: function getInitialState() {
+	    return {
+	      comment: '',
+	      post_id: this.props.postId
+	    };
+	  },
+	
+	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+	    this.setState({
+	      post_id: nextProps.postId
+	    });
+	  },
+	
+	  commentChange: function commentChange(e) {
+	    e.preventDefault();
+	    this.setState({ comment: e.target.value });
+	  },
+	
+	  submitHandler: function submitHandler(e) {
+	    e.preventDefault();
+	
+	    CommentActions.createComment({
+	      comment: this.state.comment,
+	      post_id: this.state.post_id
+	    });
+	
+	    this.setState({ comment: '' });
+	  },
+	
+	  render: function render() {
+	    return React.createElement(
+	      'form',
+	      { className: 'comment-form', onSubmit: this.submitHandler },
+	      React.createElement(
+	        FormGroup,
+	        { controlId: 'comment' },
+	        React.createElement(
+	          ControlLabel,
+	          null,
+	          'Comment:'
+	        ),
+	        React.createElement(FormControl, {
+	          componentClass: 'textarea',
+	          value: this.state.comment,
+	          onChange: this.commentChange,
+	          placeholder: 'Comment Here'
+	        })
+	      ),
+	      React.createElement(
+	        Button,
+	        { type: 'submit' },
+	        'Submit Comment'
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = CommentForm;
+
+/***/ },
+/* 530 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var PostApi = __webpack_require__(260);
+	var Dispatcher = __webpack_require__(249);
+	var PostConstants = __webpack_require__(257);
+	var PostActions = __webpack_require__(259);
+	
+	module.exports = {
+	  createComment: function createComment(comment) {
+	    PostApi.createComment(comment, PostActions.receivePost);
+	  },
+	  deleteComment: function deleteComment(commentId) {
+	    PostApi.deleteComment(commentId, PostActions.receivePost);
+	  }
+	};
+
+/***/ },
+/* 531 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(532);
+	
+
+
+/***/ },
+/* 532 */
+/***/ function(module, exports, __webpack_require__) {
+
 	/* WEBPACK VAR INJECTION */(function(process) {var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(38);
-	var ExecutionEnvironment = __webpack_require__(530);
-	var ModalPortal = React.createFactory(__webpack_require__(531));
-	var ariaAppHider = __webpack_require__(546);
-	var elementClass = __webpack_require__(547);
+	var ExecutionEnvironment = __webpack_require__(533);
+	var ModalPortal = React.createFactory(__webpack_require__(534));
+	var ariaAppHider = __webpack_require__(549);
+	var elementClass = __webpack_require__(550);
 	var renderSubtreeIntoContainer = __webpack_require__(38).unstable_renderSubtreeIntoContainer;
-	var Assign = __webpack_require__(535);
+	var Assign = __webpack_require__(538);
 	
 	var SafeHTMLElement = ExecutionEnvironment.canUseDOM ? window.HTMLElement : {};
 	var AppElement = ExecutionEnvironment.canUseDOM ? document.body : {appendChild: function() {}};
@@ -52716,7 +52969,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 530 */
+/* 533 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -52761,14 +53014,14 @@
 
 
 /***/ },
-/* 531 */
+/* 534 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var div = React.DOM.div;
-	var focusManager = __webpack_require__(532);
-	var scopeTab = __webpack_require__(534);
-	var Assign = __webpack_require__(535);
+	var focusManager = __webpack_require__(535);
+	var scopeTab = __webpack_require__(537);
+	var Assign = __webpack_require__(538);
 	
 	// so that our CSS is statically analyzable
 	var CLASS_NAMES = {
@@ -52953,10 +53206,10 @@
 
 
 /***/ },
-/* 532 */
+/* 535 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var findTabbable = __webpack_require__(533);
+	var findTabbable = __webpack_require__(536);
 	var modalElement = null;
 	var focusLaterElement = null;
 	var needToFocus = false;
@@ -53027,7 +53280,7 @@
 
 
 /***/ },
-/* 533 */
+/* 536 */
 /***/ function(module, exports) {
 
 	/*!
@@ -53083,10 +53336,10 @@
 
 
 /***/ },
-/* 534 */
+/* 537 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var findTabbable = __webpack_require__(533);
+	var findTabbable = __webpack_require__(536);
 	
 	module.exports = function(node, event) {
 	  var tabbable = findTabbable(node);
@@ -53108,7 +53361,7 @@
 
 
 /***/ },
-/* 535 */
+/* 538 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -53119,9 +53372,9 @@
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var baseAssign = __webpack_require__(536),
-	    createAssigner = __webpack_require__(542),
-	    keys = __webpack_require__(538);
+	var baseAssign = __webpack_require__(539),
+	    createAssigner = __webpack_require__(545),
+	    keys = __webpack_require__(541);
 	
 	/**
 	 * A specialized version of `_.assign` for customizing assigned values without
@@ -53194,7 +53447,7 @@
 
 
 /***/ },
-/* 536 */
+/* 539 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -53205,8 +53458,8 @@
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var baseCopy = __webpack_require__(537),
-	    keys = __webpack_require__(538);
+	var baseCopy = __webpack_require__(540),
+	    keys = __webpack_require__(541);
 	
 	/**
 	 * The base implementation of `_.assign` without support for argument juggling,
@@ -53227,7 +53480,7 @@
 
 
 /***/ },
-/* 537 */
+/* 540 */
 /***/ function(module, exports) {
 
 	/**
@@ -53265,7 +53518,7 @@
 
 
 /***/ },
-/* 538 */
+/* 541 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -53276,9 +53529,9 @@
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var getNative = __webpack_require__(539),
-	    isArguments = __webpack_require__(540),
-	    isArray = __webpack_require__(541);
+	var getNative = __webpack_require__(542),
+	    isArguments = __webpack_require__(543),
+	    isArray = __webpack_require__(544);
 	
 	/** Used to detect unsigned integer values. */
 	var reIsUint = /^\d+$/;
@@ -53507,7 +53760,7 @@
 
 
 /***/ },
-/* 539 */
+/* 542 */
 /***/ function(module, exports) {
 
 	/**
@@ -53650,7 +53903,7 @@
 
 
 /***/ },
-/* 540 */
+/* 543 */
 /***/ function(module, exports) {
 
 	/**
@@ -53899,7 +54152,7 @@
 
 
 /***/ },
-/* 541 */
+/* 544 */
 /***/ function(module, exports) {
 
 	/**
@@ -54085,7 +54338,7 @@
 
 
 /***/ },
-/* 542 */
+/* 545 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -54096,9 +54349,9 @@
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var bindCallback = __webpack_require__(543),
-	    isIterateeCall = __webpack_require__(544),
-	    restParam = __webpack_require__(545);
+	var bindCallback = __webpack_require__(546),
+	    isIterateeCall = __webpack_require__(547),
+	    restParam = __webpack_require__(548);
 	
 	/**
 	 * Creates a function that assigns properties of source object(s) to a given
@@ -54143,7 +54396,7 @@
 
 
 /***/ },
-/* 543 */
+/* 546 */
 /***/ function(module, exports) {
 
 	/**
@@ -54214,7 +54467,7 @@
 
 
 /***/ },
-/* 544 */
+/* 547 */
 /***/ function(module, exports) {
 
 	/**
@@ -54352,7 +54605,7 @@
 
 
 /***/ },
-/* 545 */
+/* 548 */
 /***/ function(module, exports) {
 
 	/**
@@ -54425,7 +54678,7 @@
 
 
 /***/ },
-/* 546 */
+/* 549 */
 /***/ function(module, exports) {
 
 	var _element = typeof document !== 'undefined' ? document.body : null;
@@ -54473,7 +54726,7 @@
 
 
 /***/ },
-/* 547 */
+/* 550 */
 /***/ function(module, exports) {
 
 	module.exports = function(opts) {
@@ -54538,7 +54791,7 @@
 
 
 /***/ },
-/* 548 */
+/* 551 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -54550,7 +54803,7 @@
 	var NavItem = __webpack_require__(261).NavItem;
 	var Modal = __webpack_require__(261).Modal;
 	
-	var PostForm = __webpack_require__(549);
+	var PostForm = __webpack_require__(552);
 	
 	var hashHistory = __webpack_require__(168).hashHistory;
 	
@@ -54628,7 +54881,7 @@
 	module.exports = Navigation;
 
 /***/ },
-/* 549 */
+/* 552 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -54637,6 +54890,7 @@
 	var ReactDOM = __webpack_require__(38);
 	var PostActions = __webpack_require__(259);
 	var PostStore = __webpack_require__(256);
+	var hashHistory = __webpack_require__(168).hashHistory;
 	
 	var FormGroup = __webpack_require__(261).FormGroup;
 	var FormControl = __webpack_require__(261).FormControl;
@@ -54647,12 +54901,19 @@
 	  displayName: 'PostForm',
 	
 	  getInitialState: function getInitialState() {
-	    return {
-	      title: '',
-	      body: '',
-	      post_type: 0,
-	      post_visibility: 0
-	    };
+	    if (this.props.post) {
+	      return {
+	        title: this.props.post.title,
+	        body: this.props.post.body
+	      };
+	    } else {
+	      return {
+	        title: '',
+	        body: '',
+	        post_type: 0,
+	        post_visibility: 0
+	      };
+	    }
 	  },
 	
 	  componentDidMount: function componentDidMount() {
@@ -54682,7 +54943,7 @@
 	    this.setState({ post_type: parseInt(e.target.value) });
 	  },
 	
-	  submitHandler: function submitHandler(e) {
+	  newPostHandler: function newPostHandler(e) {
 	    e.preventDefault();
 	
 	    PostActions.createPost({
@@ -54695,10 +54956,36 @@
 	    this.props.close();
 	  },
 	
+	  updatePostHandler: function updatePostHandler(e) {
+	    e.preventDefault();
+	
+	    PostActions.updatePost({
+	      title: this.state.title,
+	      body: this.state.body,
+	      id: this.props.post.id
+	    });
+	
+	    this.props.close();
+	  },
+	
+	  updateProps: function updateProps() {
+	    this.setState({ title: this.props.post.title, body: this.props.post.body });
+	  },
+	
 	  render: function render() {
+	    var typeHandler = void 0;
+	    var submitText = void 0;
+	    if (this.props.subType === "update") {
+	      typeHandler = this.updatePostHandler;
+	      submitText = "Update Post";
+	    } else {
+	      typeHandler = this.newPostHandler;
+	      submitText = "Submit Post";
+	    }
+	
 	    return React.createElement(
 	      'form',
-	      { className: 'post-form', onSubmit: this.submitHandler },
+	      { className: 'post-form', onSubmit: typeHandler },
 	      React.createElement(
 	        FormGroup,
 	        { controlId: 'summary' },
@@ -54733,7 +55020,7 @@
 	      React.createElement(
 	        Button,
 	        { type: 'submit' },
-	        'Submit Post'
+	        submitText
 	      )
 	    );
 	  }
@@ -54742,13 +55029,13 @@
 	module.exports = PostForm;
 
 /***/ },
-/* 550 */
+/* 553 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var React = __webpack_require__(1);
-	var Nav = __webpack_require__(548);
+	var Nav = __webpack_require__(551);
 	var PostIndex = __webpack_require__(258);
 	
 	var ClassRoom = React.createClass({
@@ -54774,13 +55061,13 @@
 	module.exports = ClassRoom;
 
 /***/ },
-/* 551 */
+/* 554 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var React = __webpack_require__(1);
-	var LogIn = __webpack_require__(552);
+	var LogIn = __webpack_require__(555);
 	
 	var Jumbotron = __webpack_require__(261).Jumbotron;
 	var Modal = __webpack_require__(261).Modal;
@@ -54842,7 +55129,7 @@
 	module.exports = WelcomePage;
 
 /***/ },
-/* 552 */
+/* 555 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -54975,213 +55262,6 @@
 	});
 	
 	module.exports = Login;
-
-/***/ },
-/* 553 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var React = __webpack_require__(1);
-	var ReactDOM = __webpack_require__(38);
-	var PostActions = __webpack_require__(259);
-	var PostStore = __webpack_require__(256);
-	var AnswerActions = __webpack_require__(527);
-	
-	var FormGroup = __webpack_require__(261).FormGroup;
-	var FormControl = __webpack_require__(261).FormControl;
-	var ControlLabel = __webpack_require__(261).ControlLabel;
-	var Button = __webpack_require__(261).Button;
-	
-	var StudentAnswerForm = React.createClass({
-	  displayName: 'StudentAnswerForm',
-	
-	  getInitialState: function getInitialState() {
-	    return {
-	      response: this.props.response,
-	      post_id: this.props.postId,
-	      answer_type: 0
-	    };
-	  },
-	
-	  componentDidMount: function componentDidMount() {
-	    var self = this;
-	    setTimeout(function () {
-	      ReactDOM.findDOMNode(self.refs.autoFocus).focus();
-	    }, 500);
-	  },
-	
-	  responseChange: function responseChange(e) {
-	    e.preventDefault();
-	    this.setState({ response: e.target.value });
-	  },
-	
-	  submitHandler: function submitHandler(e) {
-	    e.preventDefault();
-	
-	    AnswerActions.createAnswer({
-	      response: this.state.response,
-	      post_id: this.state.post_id,
-	      answer_type: 0
-	    });
-	
-	    this.props.close();
-	  },
-	
-	  render: function render() {
-	    return React.createElement(
-	      'form',
-	      { className: 'answer-form', onSubmit: this.submitHandler },
-	      React.createElement(
-	        FormGroup,
-	        { controlId: 'response' },
-	        React.createElement(FormControl, {
-	          componentClass: 'textarea',
-	          value: this.state.response,
-	          onChange: this.responseChange,
-	          ref: 'autoFocus'
-	        })
-	      ),
-	      React.createElement(
-	        Button,
-	        { type: 'submit' },
-	        'Submit'
-	      )
-	    );
-	  }
-	});
-	
-	module.exports = StudentAnswerForm;
-
-/***/ },
-/* 554 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var React = __webpack_require__(1);
-	var Well = __webpack_require__(261).Well;
-	
-	var CommentIndex = React.createClass({
-	  displayName: 'CommentIndex',
-	  render: function render() {
-	
-	    var comments = this.props.comments;
-	    if (typeof comments === "undefined" || comments.length === 0) {
-	      return React.createElement('div', null);
-	    }
-	
-	    return React.createElement(
-	      'div',
-	      { className: 'comments-index' },
-	      comments.map(function (comment) {
-	        return React.createElement(
-	          Well,
-	          { bsSize: 'large', key: comment.id },
-	          comment.comment
-	        );
-	      })
-	    );
-	  }
-	});
-	
-	module.exports = CommentIndex;
-
-/***/ },
-/* 555 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var React = __webpack_require__(1);
-	var CommentActions = __webpack_require__(556);
-	var FormGroup = __webpack_require__(261).FormGroup;
-	var FormControl = __webpack_require__(261).FormControl;
-	var ControlLabel = __webpack_require__(261).ControlLabel;
-	var Button = __webpack_require__(261).Button;
-	
-	var CommentForm = React.createClass({
-	  displayName: 'CommentForm',
-	
-	  getInitialState: function getInitialState() {
-	    return {
-	      comment: '',
-	      post_id: this.props.postId
-	    };
-	  },
-	
-	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
-	    this.setState({
-	      post_id: nextProps.postId
-	    });
-	  },
-	
-	  commentChange: function commentChange(e) {
-	    e.preventDefault();
-	    this.setState({ comment: e.target.value });
-	  },
-	
-	  submitHandler: function submitHandler(e) {
-	    e.preventDefault();
-	
-	    CommentActions.createComment({
-	      comment: this.state.comment,
-	      post_id: this.state.post_id
-	    });
-	
-	    this.setState({ comment: '' });
-	  },
-	
-	  render: function render() {
-	    return React.createElement(
-	      'form',
-	      { className: 'comment-form', onSubmit: this.submitHandler },
-	      React.createElement(
-	        FormGroup,
-	        { controlId: 'comment' },
-	        React.createElement(
-	          ControlLabel,
-	          null,
-	          'Comment:'
-	        ),
-	        React.createElement(FormControl, {
-	          componentClass: 'textarea',
-	          value: this.state.comment,
-	          onChange: this.commentChange,
-	          placeholder: 'Comment Here'
-	        })
-	      ),
-	      React.createElement(
-	        Button,
-	        { type: 'submit' },
-	        'Submit Comment'
-	      )
-	    );
-	  }
-	
-	});
-	
-	module.exports = CommentForm;
-
-/***/ },
-/* 556 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var PostApi = __webpack_require__(260);
-	var Dispatcher = __webpack_require__(249);
-	var PostConstants = __webpack_require__(257);
-	var PostActions = __webpack_require__(259);
-	
-	module.exports = {
-	  createComment: function createComment(comment) {
-	    PostApi.createComment(comment, PostActions.receivePost);
-	  },
-	  deleteComment: function deleteComment(commentId) {
-	    PostApi.deleteComment(commentId, PostActions.receivePost);
-	  }
-	};
 
 /***/ }
 /******/ ]);

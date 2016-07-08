@@ -52,6 +52,7 @@ const StudentAnswerForm = React.createClass({
             value={this.state.response}
             onChange={this.responseChange}
             ref='autoFocus'
+            placeholder="Begin The Answer Here"
           />
         </FormGroup>
         <Button type="submit">Submit</Button>

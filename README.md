@@ -43,6 +43,10 @@ collabright is single-page, delivering all content on one static page. The root 
 
   I will be continuing to work on this project. The features currently planned for implementation are detailed below.
 
+### Rich Text Editing
+
+  Allow for users to submit and edit with greater text editing functionality. 
+
 ### Search
 
   Searching questions, by title and by content, is an important feature in piazza.

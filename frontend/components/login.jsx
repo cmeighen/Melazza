@@ -4,9 +4,8 @@ const HashHistory = require('react-router').hashHistory;
 const UserActions = require('../actions/userActions');
 const UserStore = require('../stores/userStore');
 
-const Form = require('react-bootstrap').Form;
 const FormGroup = require('react-bootstrap').FormGroup;
-const Col = require('react-bootstrap').Col;
+const ControlLabel = require('react-bootstrap').ControlLabel;
 const FormControl = require('react-bootstrap').FormControl;
 const Button = require('react-bootstrap').Button;
 
@@ -58,38 +57,30 @@ const Login = React.createClass({
   },
 
   render: function() {
+    let submitText;
+    if (this.state.formType === "logIn") {
+      submitText = "Log In";
+    } else {
+      submitText = "Sign Up";
+    }
 
     return (
-      <Form horizontal onSubmit={this.submitHandler}>
-        <Nav bsStyle="pills" activeKey={this.formType} onSelect={this.handleSelect}>
+      <form horizontal onSubmit={this.submitHandler}>
+        <Nav id="loginsignup" bsStyle="pills" activeKey={this.formType} onSelect={this.handleSelect}>
           <NavItem eventKey="logIn">Log In</NavItem>
           <NavItem eventKey="signUp">Sign Up</NavItem>
         </Nav>
-        <div>
         <FormGroup controlId="formHorizontalEmail">
-          <Col sm={2}>
-            Email
-          </Col>
-          <Col sm={10}>
-            <FormControl type="username" placeholder="Username" ref="autoFocus" onChange={this.usernameChange}/>
-          </Col>
+          <ControlLabel>Username</ControlLabel>
+          <FormControl type="username" placeholder="Username" ref="autoFocus" onChange={this.usernameChange}/>
         </FormGroup>
 
         <FormGroup controlId="formHorizontalPassword">
-          <Col sm={2}>
-            Password
-          </Col>
-          <Col sm={10}>
-            <FormControl type="password" placeholder="Password" onChange={this.passwordChange}/>
-          </Col>
+          <ControlLabel>Password</ControlLabel>
+          <FormControl type="password" placeholder="Password" onChange={this.passwordChange}/>
         </FormGroup>
-        </div>
-        <FormGroup>
-          <Col smOffset={2} sm={10}>
-            <Button type="submit">Submit</Button>
-          </Col>
-        </FormGroup>
-      </Form>
+        <Button type="submit">{submitText}</Button>
+      </form>
     );
   }
 });

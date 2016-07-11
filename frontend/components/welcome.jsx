@@ -4,6 +4,7 @@ const LogIn = require('./login');
 const Jumbotron = require('react-bootstrap').Jumbotron;
 const Modal = require('react-bootstrap').Modal;
 const Button = require('react-bootstrap').Button;
+const Slider = require('react-slick');
 
 const UserActions = require('../actions/userActions');
 
@@ -26,19 +27,36 @@ const WelcomePage = React.createClass({
   },
 
   render(){
-    return (
-      <Jumbotron>
-        <h1>welcome to collabright</h1>
-        <p>please log in or sign up to continue</p>
-        <p>
-          <Button bsStyle="primary" onClick={this.open}>Log In</Button>
-          <Button bsStyle="primary" onClick={this.demoLogin}>Demo</Button>
 
-          <Modal show={this.state.showModal} onHide={this.close}>
-            <LogIn />
-          </Modal>
-        </p>
-      </Jumbotron>
+    return (
+      <div className="splash">
+        <div className="splash-nav">
+          <div className="splash-nav-logo">
+            <a href="/">collabright</a>
+          </div>
+          <ul className="splash-nav-center">
+            <li>Product</li>
+            <li>Testimonials</li>
+            <li>Support</li>
+            <li>About Us</li>
+          </ul>
+          <div className="splash-nav-right">
+            <Button bsStyle="primary" onClick={this.open}>Log In</Button>
+            <Button bsStyle="primary" onClick={this.demoLogin}>Demo</Button>
+            <Modal show={this.state.showModal} onHide={this.close}>
+              <Modal.Header closeButton>
+                <LogIn />
+              </Modal.Header>
+            </Modal>
+          </div>
+        </div>
+        <div className="splash-body">
+          <div><img src="http://res.cloudinary.com/cactuscloud/image/upload/v1468181101/PuzzlePush_ejzrnq.jpg"></img></div>
+        </div>
+        <div className="splash-writeup">
+
+        </div>
+      </div>
     );
   }
 });

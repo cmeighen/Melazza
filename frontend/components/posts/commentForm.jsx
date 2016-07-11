@@ -47,7 +47,7 @@ const CommentForm = React.createClass({
             placeholder="Comment Here"
             />
         </FormGroup>
-        <Button type="submit">Submit Comment</Button>
+        <Button type="submit" id="comment-submit-btn">Submit Comment</Button>
       </form>
     );
   }

@@ -1,6 +1,10 @@
 if @post
   json.extract!(@post, :id, :title, :author_id, :body, :post_type, :post_visibility)
+  short = post.body[0..50]
+  json.short short
 end
+
+
 
 if show_answers
   json.answers do

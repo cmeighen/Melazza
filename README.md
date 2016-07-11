@@ -1,142 +1,75 @@
 # collabright
 
-[Heroku link][heroku]
+[collabright][collabrightus]
+[collabrightus]: http://www.collabright.us
 
-[heroku]: https://collabright.herokuapp.com/
+## Description
 
-## Minimum Viable Product
+collabright is a full-stack web application inspired by piazza. It utilizes Ruby on Rails on the backend, a PostgreSQL database, and React.js with a Flux architectural framework on the frontend.
 
-collabright is a web application modeled after Piazza that will be built using Ruby on Rails and React.js.
+## Features and Implementation
 
-- [ ] Hosting on Heroku
-- [ ] New account creation, login, and guest/demo login
-- [ ] A production README.
-- [ ] Ability to Create and Save Posts
-  - [ ] Posts can be created, edited, and viewed.  
-  - [ ] Posts track date submitted, last updated date, type of submission(user or instructor), type of post(public question, note, instructor only).
-  - [ ] Post Body can only be edited by owner.
-- [ ] Collaborative Answer Field
-  - [ ] Can be edited by all users.
-  - [ ] Changes are submitted in real time, with "new" edits badge visible in the question index view.
-  - [ ] Field submission history is tracked.
-- [ ] Post-level Discussion Field
-  - [ ] Users can create new comments.
-  - [ ] New comments update the discussion.
-- [ ] User Homepage
-  - [ ] Homepage displays navigation components
-  - [ ] Homepage requires user login before loading further data.
-  - [ ] User can open and close the Post Search List
+### Single-Page App
 
+collabright is single-page, delivering all content on one static page. The root page acts as an authentication wall, listening to a Session Store (`UserStore`) and rendering the splash page or classroom view based on a call creating a new session or matching a current session to an existing session.
 
-## Design Docs
-* [View Wireframes][views]
-* [React Components][components]
-* [Flux Cycles][flux-cycles]
-* [API endpoints][api-endpoints]
-* [DB schema][schema]
+### Question Submission, Editing, and Listing
 
-[views]: docs/views.md
-[components]: docs/components.md
-[flux-cycles]: docs/flux-cycles.md
-[api-endpoints]: docs/api-endpoints.md
-[schema]: docs/schema.md
+  Questions are stored in one table in the database, tracking "question_id" (pk), "title" (summary), "body" (full question), "user_id".
 
-## Implementation Timeline
+  Users may create new posts, submitting a summary and full question. The user_id will be appended to the submission within the create method of the posts controller.
 
-### Phase 1: Backend setup and Front End User Authentication (1 day, W1 Tu 6pm)
+  When a logged-in user navigates to the class page, an API call is made to the database, pulling the title, body, and id for all posts of the current class, rendering a list of items with a title and body preview.
 
-**Objective:** Functioning rails project with Authentication
+### Answer and Discussion Submission and Editing
 
-- [ ] create new project
-- [ ] create `User` model
-- [ ] authentication
-- [ ] user signup/signin pages
-- [ ] blank landing page after signin
+  Answers and Discussion each have a separate table. Answers belong to a question, while discussion posts belong to both a question and user.
 
-### Phase 2: Posts Model, API, and basic APIUtil (1.5 days, W1 Th 12pm)
+### Question Rendering
 
-**Objective:** Posts can be created, read, edited and destroyed through
-the API.
-post
-- [ ] create `Post` model
-- [ ] seed the database with a small amount of test data
-- [ ] CRUD API for posts (`PostsController`)
-- [ ] jBuilder views for posts
-- [ ] setup Webpack & Flux scaffold
-- [ ] setup `APIUtil` to interact with the API
-- [ ] test out API interaction in the console.
+  When a question is selected from the index listing, an API call is made to get the questions full data. Question objects include the question table information, as well as the related answer (as question.answer) and followup discussion (as question.comments).
 
-### Phase 3: Flux Architecture and Router (1.5 days, W1 F 6pm)
+  Questions are rendered as three components.
 
-**Objective:** Posts can be created, read, edited and destroyed with the
-user interface.
+  The question detail component renders the question title and body, presenting an edit option if the current user is the author of the question.
 
-- [ ] setup the flux loop with skeleton files
-- [ ] setup React Router
-- implement each post component, building out the flux loop as needed.
-  - [ ] `PostsIndex`
-  - [ ] `PostIndexItem`
-  - [ ] `PostForm`
+  The question detail component passes the question's answer to a second component, rendering
+  a button to start or edit the answer to all users.
+
+  The question detail component passes the question's comments to a third component, rendering all comments and a form to post new comments.
 
 
-### Phase 4: Review And Polish (0.5 days, W2 M 12pm)
+## To Be Implemented
 
-**Objective:** Existing pages (including signup/signin) will look good.
+  I will be continuing to work on this project. The features currently planned for implementation are detailed below.
 
-- [ ] review work so far
+### Search
 
-### Phase 5: Search (1 day, W2 Tu 12pm)
+  Searching questions, by title and by content, is an important feature in piazza.
 
-**Objective:** Posts can be searched.
+### Support for Multiple Classrooms
 
-- [ ] create Search
-- build out API, Flux loop, and components for:
-  - [ ] Searching Posts based on inputs
-  - [ ] Search updates live
-  - [ ] Search can specify title, body, comment fields to be searched
+  Additional tables and components need to be implemented to support multiple classrooms.
 
-### Phase 6: Tags/Folders (1 days, W2 Th 12pm)
+### User Profiles
 
-**Objective:** Posts can be tagged with folders, folders are displayed in the second bar of the page.
+  Additional rows need to be added to the user table.
+  Profile picture, separate email and username fields, and user post listing to be implemented.
 
-- [ ] create `Folder` model and join table
-- build out API, Flux loop, and components for:
-  - [ ] fetching folders
-  - [ ] adding folders to posts
-  - [ ] creating folders
-  - [ ] updating display when folder is clicked
-- [ ] Style new elements
+### Answer History displays
 
-### Phase 7: PostComments (1 day, W2 F 12pm)
+  Component to display the change history of answers and component to allow "slide" view of history.
 
-**Objective:** Posts have general comments, acting as an active chat for that post.
+### Folders
 
-- [ ] create 'PostComments' model and table
-- build out API, Flux loop, and components for:
-  - [ ] fetching PostComments
-  - [ ] adding comments to posts
-  - [ ] creating comments
-  - [ ] updating display when comments are created
+  Join table to allow tagging of posts into organization folders.
 
-### Phase 8: Styling Cleanup and Seeding (.5 days, W2 F 6pm)
+### Teacher Answer
 
-**objective:** Make the site feel more cohesive and awesome.
+  Additional table to store teacher answers. For classes with multiple teachers, tabbed display to allow users to view separate answers.
 
-- [ ] Get feedback on my UI from others
-- [ ] Refactor HTML classes & CSS rules
-- [ ] Add modals, transitions, and other styling flourishes.
+### Post Index Upgrade
 
-### Bonus Features (TBD)
-- [ ] Posts Search
-- [ ] Tagging/Folders
-- [ ] TA Answer
-- [ ] Pagination / infinite scroll for Posts Index
-- [ ] Pagination / infinite scroll for PostComments
-- [ ] Changelogs for Posts
-- [ ] Multiple sessions
-
-[phase-one]: docs/phases/phase1.md
-[phase-two]: docs/phases/phase2.md
-[phase-three]: docs/phases/phase3.md
-[phase-four]: docs/phases/phase4.md
-[phase-five]: docs/phases/phase5.md
+  Display icons for posts when posts contain a student answer and teacher answer.
+  Display icon for "unread" questions.
+  Pinnable posts.

@@ -56,7 +56,7 @@ const PostDetail = React.createClass({
   render: function(){
       let answers = this.state.post.answers;
       let editPost;
-      if (window.currentUser.id === this.state.post.author_id) {
+      if (window.currentUser.id === this.state.post.author_id || window.currentUser.user.id === this.state.post.author_id) {
         editPost = (
           <div>
             <Button bsStyle="primary" bsSize="large" block onClick={this.openPostForm}>Edit Post</Button>

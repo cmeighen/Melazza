@@ -8,6 +8,7 @@ let _currentUser = {};
 
 UserStore._login = function(currentUser) {
   _currentUser = currentUser;
+  window.currentUser = currentUser;
   hashHistory.push('class');
 };
 

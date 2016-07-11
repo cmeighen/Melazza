@@ -3,18 +3,21 @@ const hashHistory = require('react-router').hashHistory;
 const PostStore = require('../../stores/postStore');
 const PostActions = require('../../actions/postActions');
 
-
 const Button = require('react-bootstrap').Button;
 const Nav = require('react-bootstrap').Nav;
 const NavItem = require('react-bootstrap').NavItem;
-
 const ListGroup = require('react-bootstrap').ListGroup;
 const ListGroupItem = require('react-bootstrap').ListGroupItem;
+const Modal = require('react-bootstrap').Modal;
+const FormControl = require('react-bootstrap').FormControl;
+const PostForm = require('./postForm');
+
 
 const PostIndex = React.createClass({
   getInitialState() {
     return {
       posts: [],
+      showPostFormModal: false
     };
   },
   componentDidMount() {
@@ -35,17 +38,36 @@ const PostIndex = React.createClass({
     PostActions.getPost(postId);
   },
 
+  openPostForm(){
+    this.setState({ showPostFormModal: true });
+  },
+
+  closePostForm(){
+    this.setState({ showPostFormModal: false });
+  },
+
   render() {
     const posts = this.state.posts;
 
     return (
       <div className="post-index">
-        <Nav bsStyle="pills" stacked onSelect={this.handleSelect}>
+        <div className="post-index-header">
+          <Button bsStyle="primary" onClick={this.openPostForm}>New Post</Button>
+          <Modal show={this.state.showPostFormModal} onHide={this.closePostForm}>
+            <Modal.Header closeButton>
+              <Modal.Title>New Post</Modal.Title>
+              <PostForm close={this.closePostForm}/>
+            </Modal.Header>
+          </Modal>
+          <FormControl type="text" value="" placeholder="Search Not Implemented" />
+        </div>
+        <Nav id="nav-post-index" bsStyle="pills" stacked onSelect={this.handleSelect}>
           {
             posts.map( post => {
               return (
-                <NavItem key={post.id} eventKey={post.id}>
+                <NavItem id='post-item' key={post.id} eventKey={post.id}>
                   <div className='post-item-title'>{post.title}</div>
+                  <div className='post-item-short'>{post.body}</div>
                 </NavItem>);
             })
           }

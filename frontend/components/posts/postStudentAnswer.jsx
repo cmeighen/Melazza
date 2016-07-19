@@ -12,7 +12,8 @@ const PostStudentAnswer = React.createClass({
 
   getInitialState() {
     return {
-      showStudentAnswerModal: false,
+			showStudentAnswerModal: false,
+			answerIndex: null
     };
   },
 
@@ -23,6 +24,10 @@ const PostStudentAnswer = React.createClass({
   closeStudentAnswerModal(){
     this.setState({ showStudentAnswerModal: false });
   },
+
+	changeAnswer (e) {
+		this.setState({answerIndex: e.value})
+	},
 
   render: function(){
     if (typeof this.props.answers === "undefined" || this.props.answers.length === 0) {
@@ -46,6 +51,7 @@ const PostStudentAnswer = React.createClass({
       return(
         <div>
           <Panel header="Answer">
+					<input type="range" min="0" max="5" value="5" step="1" onChange={this.changeAnswer}/>
             <Well bsSize="large">{ this.props.answers[this.props.answers.length - 1].response }</Well>
             <Button bsStyle="primary" bsSize="large" block onClick={this.openStudentAnswerModal}>Continue Answer</Button>
           </Panel>

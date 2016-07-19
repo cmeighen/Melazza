@@ -13,55 +13,43 @@ Post.destroy_all
 ActiveRecord::Base.connection.reset_pk_sequence!("posts")
 
 users = User.create([
-  { username: 'demo', password: 'asdfasdf'},
-  { username: 'HenryB', password: 'asdfasdf'},
-  { username: 'DesignerDude43', password: 'asdfasdf'},
-  { username: 'RonArtist', password: 'asdfasdf'},
-  { username: 'PaintBrunch88', password: 'asdfasdf'},
-  { username: 'SculptorSamantha', password: 'asdfasdf'},
-  { username: 'CatLover4Life', password: 'asdfasdf'},
-  { username: 'DogLover4Life', password: 'asdfasdf'},
-  { username: 'BabyDesignKid', password: 'asdfasdf'},
-  { username: 'StoopKidLeftTheStoop', password: 'asdfasdf'},
-  { username: 'LucyBananas21', password: 'asdfasdf'},
-  { username: 'DesignMeUp123', password: 'asdfasdf'},
-  { username: 'LogoFish99', password: 'asdfasdf'},
+  { username: 'demo', password: 'asdfasdf'}
 ])
 
 posts = Post.create([
   {
-    title: "What is one?",
-    body: "There are so many what ifs.",
+    title: "Template Post",
+    body: "This is a template post.",
     author_id: 1,
     post_type: 0,
     post_visibility: 0
   },
   {
-    title: "What is two?",
-    body: "There are so many what ifs.",
-    author_id: 2,
+    title: "Posts can be changed after submission.",
+    body: "Try editing the text in parenthesis using the edit button below! Submitted posts can only be changed by the author. (You could edit the summary or question too, forcing me to reseed...)",
+    author_id: 1,
     post_type: 0,
     post_visibility: 0
   },
   {
-    title: "What is three?",
-    body: "There are so many what ifs.",
-    author_id: 3,
+    title: "Posts have answers that everyone can edit.",
+    body: "Try starting an answer or continuing the current answer in the section below!",
+    author_id: 1,
     post_type: 0,
     post_visibility: 0
   },
   {
-    title: "What is four?",
-    body: "There are so many what ifs.",
-    author_id: 4,
+    title: "Posts have discussions.",
+    body: "Try adding to the discussion at the bottom!",
+    author_id: 1,
     post_type: 0,
     post_visibility: 0
   },
   {
-    title: "What is what?",
-    body: "There are so many what ifs.",
-    author_id: 5,
+    title: "Users can submit new posts.",
+    body: "Feel free to add your own questions with the new post button at the top of the post index!",
+    author_id: 1,
     post_type: 0,
     post_visibility: 0
-  }
+  },
   ])

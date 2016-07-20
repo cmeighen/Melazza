@@ -4,7 +4,6 @@ const LogIn = require('./login');
 const Jumbotron = require('react-bootstrap').Jumbotron;
 const Modal = require('react-bootstrap').Modal;
 const Button = require('react-bootstrap').Button;
-const Slider = require('react-slick');
 
 const UserActions = require('../actions/userActions');
 

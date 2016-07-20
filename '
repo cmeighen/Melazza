@@ -58,7 +58,7 @@ const PostStudentAnswer = React.createClass({
       return(
         <div>
           <Panel header="Answer">
-					<input type="range" min="0" max={(this.props.answers.length - 1).toString()} value={this.state.answerIndex} onChange={this.changeAnswer} className="answer-slider"/>
+					<input type="range" min="0" max={(this.props.answers.length - 1).toString()} value={this.state.answerIndex} step="1" onChange={this.changeAnswer}/>
             <Well bsSize="large">{ this.props.answers[this.state.answerIndex].response }</Well>
             <Button bsStyle="primary" bsSize="large" block onClick={this.openStudentAnswerModal}>Continue Answer</Button>
           </Panel>

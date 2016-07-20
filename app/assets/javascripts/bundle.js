@@ -53617,7 +53617,7 @@
 	        React.createElement(
 	          Panel,
 	          { header: 'Answer' },
-	          React.createElement('input', { type: 'range', min: '0', max: (this.props.answers.length - 1).toString(), value: this.state.answerIndex, step: '1', onChange: this.changeAnswer, className: 'answer-slider' }),
+	          React.createElement('input', { type: 'range', min: '0', max: (this.props.answers.length - 1).toString(), value: this.state.answerIndex, onChange: this.changeAnswer, className: 'answer-slider' }),
 	          React.createElement(
 	            Well,
 	            { bsSize: 'large' },

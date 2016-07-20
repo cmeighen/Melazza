@@ -17,6 +17,13 @@ const PostStudentAnswer = React.createClass({
     };
   },
 
+	componentWillReceiveProps(newProps) {
+		if (newProps.answers) {
+			this.startIdx = newProps.answers.length - 1
+			this.setState({answerIndex: this.startIdx})
+		}
+	},
+
   openStudentAnswerModal(){
     this.setState({ showStudentAnswerModal: true });
   },
@@ -26,7 +33,7 @@ const PostStudentAnswer = React.createClass({
   },
 
 	changeAnswer (e) {
-		this.setState({answerIndex: e.value})
+		this.setState({answerIndex: e.target.value})
 	},
 
   render: function(){
@@ -51,8 +58,8 @@ const PostStudentAnswer = React.createClass({
       return(
         <div>
           <Panel header="Answer">
-					<input type="range" min="0" max="5" value="5" step="1" onChange={this.changeAnswer}/>
-            <Well bsSize="large">{ this.props.answers[this.props.answers.length - 1].response }</Well>
+					<input type="range" min="0" max={(this.props.answers.length - 1).toString()} value={this.state.answerIndex} step="1" onChange={this.changeAnswer} className="answer-slider"/>
+            <Well bsSize="large">{ this.props.answers[this.state.answerIndex].response }</Well>
             <Button bsStyle="primary" bsSize="large" block onClick={this.openStudentAnswerModal}>Continue Answer</Button>
           </Panel>
           <Modal show={this.state.showStudentAnswerModal} onHide={this.closeStudentAnswerModal}>

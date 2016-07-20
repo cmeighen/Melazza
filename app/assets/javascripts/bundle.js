@@ -53561,6 +53561,12 @@
 	      answerIndex: null
 	    };
 	  },
+	  componentWillReceiveProps: function componentWillReceiveProps(newProps) {
+	    if (newProps.answers) {
+	      this.startIdx = newProps.answers.length - 1;
+	      this.setState({ answerIndex: this.startIdx });
+	    }
+	  },
 	  openStudentAnswerModal: function openStudentAnswerModal() {
 	    this.setState({ showStudentAnswerModal: true });
 	  },
@@ -53568,7 +53574,7 @@
 	    this.setState({ showStudentAnswerModal: false });
 	  },
 	  changeAnswer: function changeAnswer(e) {
-	    this.setState({ answerIndex: e.value });
+	    this.setState({ answerIndex: e.target.value });
 	  },
 	
 	
@@ -53611,11 +53617,11 @@
 	        React.createElement(
 	          Panel,
 	          { header: 'Answer' },
-	          React.createElement('input', { type: 'range', min: '0', max: '5', value: '5', step: '1', onChange: this.changeAnswer }),
+	          React.createElement('input', { type: 'range', min: '0', max: (this.props.answers.length - 1).toString(), value: this.state.answerIndex, step: '1', onChange: this.changeAnswer, className: 'answer-slider' }),
 	          React.createElement(
 	            Well,
 	            { bsSize: 'large' },
-	            this.props.answers[this.props.answers.length - 1].response
+	            this.props.answers[this.state.answerIndex].response
 	          ),
 	          React.createElement(
 	            Button,

@@ -1,0 +1,7 @@
+.answer-slider {
+  cursor: -webkit-grab;
+}
+
+.answer-slider:active {
+  cursor: -webkit-grabbing;
+}

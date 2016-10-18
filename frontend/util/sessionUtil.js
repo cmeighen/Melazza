@@ -1,5 +1,5 @@
 
-const sessionApi = {
+const sessionUtil = {
   fetchCurrentUser: function(success) {
     $.ajax({
       type: 'GET',
@@ -43,4 +43,4 @@ const sessionApi = {
   }
 };
 
-module.exports = sessionApi;
+module.exports = sessionUtil;

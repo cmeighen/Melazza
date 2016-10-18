@@ -1,34 +1,32 @@
 const React = require('react');
 const PostStore = require('../../stores/postStore');
 const PostActions = require('../../actions/postActions');
-const Modal = require('react-bootstrap').Modal;
-const Panel = require('react-bootstrap').Panel;
-const Button = require('react-bootstrap').Button;
-const Well = require('react-bootstrap').Well;
+const UserStore = require('../../stores/userStore');
+const UserActions = require('../../actions/userActions');
 
 const StudentAnswer = require('./postStudentAnswer');
 const CommentIndex = require('./commentIndex');
 const CommentForm = require('./commentForm');
 const PostForm = require('./postForm');
 
-
+const Modal = require('react-bootstrap').Modal;
+const Panel = require('react-bootstrap').Panel;
+const Button = require('react-bootstrap').Button;
+const Well = require('react-bootstrap').Well;
 
 const PostDetail = React.createClass({
   getInitialState: function(){
     return {
-      post: PostStore.find(this.props.params.postId),
+      currentUser: '',
+      post: '',
       showPostFormModal: false
     };
   },
 
-  componentWillMount: function(){
-    this.setState({
-      post: PostStore.find(this.props.params.postId)
-    });
-  },
-
   componentDidMount: function(){
-    this.postStoreListener = PostStore.addListener(this._onChange);
+    this.postStoreListener = PostStore.addListener(this._onPostChange);
+    this.userStoreListener = UserStore.addListener(this._onUserChange);
+    PostActions.getPost(this.props.params.postId);
   },
 
   componentWillReceiveProps: function(nextProps){
@@ -41,8 +39,12 @@ const PostDetail = React.createClass({
     this.postStoreListener.remove();
   },
 
-  _onChange() {
+  _onPostChange() {
     this.setState({ post: PostStore.find(this.props.params.postId)});
+  },
+
+  _onUserChange() {
+    this.setState({ currentUser: UserStore.currentUser});
   },
 
   openPostForm(){
@@ -54,9 +56,14 @@ const PostDetail = React.createClass({
   },
 
   render: function(){
-      let answers = this.state.post.answers;
-      let editPost;
-      if (window.currentUser.id === this.state.post.author_id || window.currentUser.user.id === this.state.post.author_id) {
+
+    let answers;
+    if (this.state.post && this.state.post.answers) {
+      answers = this.state.post.answers;
+    }
+
+    let editPost;
+    if (this.state.currentUser && this.state.currentUser.id === this.state.post.author_id) {
         editPost = (
           <div>
             <Button bsStyle="primary" bsSize="large" block onClick={this.openPostForm}>Edit Post</Button>
@@ -68,14 +75,10 @@ const PostDetail = React.createClass({
               </Modal>
           </div>
         );
-      } else {
-        editPost = (
-          <div></div>
-        );
       }
 
     return(
-      <div className="post-container">
+      <div className="post-container clear">
         <div className="post-details">
           <Panel header="Question" id="post-details">
             <h5>Description</h5>

@@ -6,12 +6,6 @@
   <%= javascript_include_tag 'application' %>
   <%= csrf_meta_tags %>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
-  <% if current_user %>
-    <script type="text/javascript">
-      window.currentUser = <%= current_user.to_json.html_safe %>
-    </script>
-  <% end %>
-
 </head>
 <body>
 

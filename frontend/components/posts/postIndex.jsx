@@ -34,8 +34,7 @@ const PostIndex = React.createClass({
   },
 
   handleSelect(postId) {
-    hashHistory.push("/class/posts/" + postId);
-    PostActions.getPost(postId);
+    hashHistory.push("/posts/" + postId);
   },
 
   openPostForm(){
@@ -48,30 +47,29 @@ const PostIndex = React.createClass({
 
   render() {
     const posts = this.state.posts;
+    let postList = posts.map( post => {
+      return(
+        <li key={post.id} onClick={this.handleSelect.bind(this, post.id)}>
+          <div className='post-item-title'>{post.title}</div>
+          <div className='post-item-short'>{post.body}</div>
+        </li>
+      );
+    });
 
     return (
       <div className="post-index">
         <div className="post-index-header">
-          <Button bsStyle="primary" onClick={this.openPostForm}>New Post</Button>
+          <a className="new-post-btn" onClick={this.openPostForm}><span>New Post</span></a>
           <Modal show={this.state.showPostFormModal} onHide={this.closePostForm}>
             <Modal.Header closeButton>
               <Modal.Title>New Post</Modal.Title>
               <PostForm close={this.closePostForm}/>
             </Modal.Header>
           </Modal>
-          <FormControl type="text" value="" placeholder="Search Not Implemented" />
         </div>
-        <Nav id="nav-post-index" bsStyle="pills" stacked onSelect={this.handleSelect}>
-          {
-            posts.map( post => {
-              return (
-                <NavItem id='post-item' key={post.id} eventKey={post.id}>
-                  <div className='post-item-title'>{post.title}</div>
-                  <div className='post-item-short'>{post.body}</div>
-                </NavItem>);
-            })
-          }
-        </Nav>
+        <ul className="post-index-list">
+          {postList}
+        </ul>
       </div>
     );
   }

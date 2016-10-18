@@ -45,7 +45,7 @@ collabright is single-page, delivering all content on one static page. The root 
 
 ### Rich Text Editing
 
-  Allow for users to submit and edit with greater text editing functionality. 
+  Allow for users to submit and edit with greater text editing functionality.
 
 ### Search
 
@@ -77,3 +77,7 @@ collabright is single-page, delivering all content on one static page. The root 
   Display icons for posts when posts contain a student answer and teacher answer.
   Display icon for "unread" questions.
   Pinnable posts.
+
+### Custom Button Hover Effects
+
+  Use http://codepen.io/kjbrum/pen/wBBLXx for inspiration.

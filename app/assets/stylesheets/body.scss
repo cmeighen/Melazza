@@ -1,0 +1,36 @@
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.42857143;
+  background-color: #fff;
+  margin: 0;
+  padding: 0;
+  min-width: 800;
+}
+
+.classroom {
+  padding-top: 45px;
+}
+
+.post-index {
+  position: fixed;
+  margin-left: 5px;
+  height: 96vh;
+  width: 300px;
+  overflow-y: auto;
+}
+
+.post-index > button {
+
+}
+
+.class-child-container {
+  margin-left: 310px;
+  height: 96vh;
+  overflow-y: auto;
+  min-width: 600px;
+}
+
+.post-container {
+  width: 100%;
+}

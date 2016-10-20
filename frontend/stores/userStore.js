@@ -7,14 +7,11 @@ const UserStore = new Store(Dispatcher);
 let _currentUser = {};
 
 UserStore._login = function(currentUser) {
-  _currentUser = currentUser;
-  window.currentUser = currentUser;
-  hashHistory.push('class');
+  _currentUser = currentUser.user;
 };
 
 UserStore._logout = function() {
   _currentUser = {};
-  setTimeout(()=> {hashHistory.push('/');}, 0);
 };
 
 UserStore.currentUser = function() {

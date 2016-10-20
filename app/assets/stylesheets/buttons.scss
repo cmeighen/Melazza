@@ -1,0 +1,304 @@
+
+
+$position-default: null !default;
+$mix-percent-default: 45% !default;
+
+@mixin size($width, $height: $width) {
+	width: $width;
+	height: $height;
+}
+// Advanced positioning
+// --------------------
+@mixin position($type,
+								$top: $position-default,
+								$right: $position-default,
+								$bottom: $position-default,
+								$left: $position-default) {
+	position: $type;
+	$allowed_types: absolute relative fixed;
+	@if not index($allowed_types, $type) {
+		@warn "Unknown position: #{$type}.";
+	}
+	@each $data in top $top, right $right, bottom $bottom, left $left {
+		#{nth($data, 1)}: nth($data, 2);
+	}
+}
+@mixin absolute($top: $position-default, $right: $position-default, $bottom: $position-default, $left: $position-default) {
+	@include position(absolute, $top, $right, $bottom, $left);
+}
+@mixin relative($top: $position-default, $right: $position-default, $bottom: $position-default, $left: $position-default) {
+	@include position(relative, $top, $right, $bottom, $left);
+}
+@mixin fixed($top: $position-default, $right: $position-default, $bottom: $position-default, $left: $position-default) {
+	@include position(fixed, $top, $right, $bottom, $left);
+}
+
+// Mix white with another color
+// ----------------------------
+@function tint($color, $percent: $mix-percent-default){
+	@return mix(white, $color, $percent);
+}
+
+// Mix black with another color
+// ----------------------------
+@function shade($color, $percent: $mix-percent-default){
+	@return mix(black, $color, $percent);
+}
+
+a:hover, a:visited, a:link, a:active
+{
+    text-decoration: none;
+}
+
+.log-in-btn {
+	$btn-width: 86px;
+	$btn-height: 40px;
+	$btn-color: #428bca;
+	$btn-color-dark: shade($btn-color, 40%);
+	color: tint($btn-color);
+
+	text-align: center;
+	text-decoration: none;
+	position: relative;
+  display: block;
+  @include size(100%, $btn-height);
+  border: 1px solid currentColor;
+
+	*, *:before, *:after {
+	 box-sizing: border-box;
+	 transition: 0.5s;
+ 	}
+
+	*:before, *:after {
+  z-index: -1;
+	}
+
+	i, em, b, strong, span {
+	transition: none;
+	}
+
+  &:before,
+  &:after,
+  span:before,
+  span:after {
+    content: '';
+    @include absolute(0,null,null,0);
+    @include size($btn-width, 0);
+    background: rgba($btn-color-dark, 0.25);
+    transition: 0.4s;
+  }
+
+  &:after,
+  span:before {
+    top: auto;
+    bottom: 0;
+  }
+
+  span:before,
+  span:after {
+    transition-delay: 0.4s;
+  }
+
+  &:hover {
+    color: tint($btn-color, 90%);
+		cursor: pointer;
+
+    &:before,
+    &:after,
+    span:before,
+    span:after {
+      height: $btn-height;
+    }
+	}
+}
+
+.log-out-btn {
+	$btn-width: 92px;
+	$btn-height: 40px;
+	$btn-color: #428bca;
+	$btn-color-dark: shade($btn-color, 40%);
+	color: tint($btn-color);
+
+	text-align: center;
+	text-decoration: none;
+	position: relative;
+  display: block;
+  @include size(100%, $btn-height);
+  border: 1px solid currentColor;
+
+	*, *:before, *:after {
+	 box-sizing: border-box;
+	 transition: 0.5s;
+ 	}
+
+	*:before, *:after {
+  z-index: -1;
+	}
+
+	i, em, b, strong, span {
+	transition: none;
+	}
+
+  &:before,
+  &:after,
+  span:before,
+  span:after {
+    content: '';
+    @include absolute(0,null,null,0);
+    @include size($btn-width, 0);
+    background: rgba($btn-color-dark, 0.25);
+    transition: 0.4s;
+  }
+
+  &:after,
+  span:before {
+    top: auto;
+    bottom: 0;
+  }
+
+  span:before,
+  span:after {
+    transition-delay: 0.4s;
+  }
+
+  &:hover {
+    color: tint($btn-color, 75%);
+		cursor: pointer;
+
+    &:before,
+    &:after,
+    span:before,
+    span:after {
+      height: $btn-height;
+    }
+	}
+}
+
+.current-user-btn {
+	$btn-width: 77px;
+	$btn-height: 40px;
+	$btn-color: #428bca;
+	$btn-color-dark: shade($btn-color, 40%);
+	color: tint($btn-color);
+
+	text-align: center;
+	text-decoration: none;
+	position: relative;
+  display: block;
+  @include size(100%, $btn-height);
+  border: 1px solid currentColor;
+
+	*, *:before, *:after {
+	 box-sizing: border-box;
+	 transition: 0.5s;
+ 	}
+
+	*:before, *:after {
+  z-index: -1;
+	}
+
+	i, em, b, strong, span {
+	transition: none;
+	}
+
+  &:before,
+  &:after,
+  span:before,
+  span:after {
+    content: '';
+    @include absolute(0,null,null,0);
+    @include size($btn-width, 0);
+    background: rgba($btn-color-dark, 0.25);
+    transition: 0.4s;
+  }
+
+  &:after,
+  span:before {
+    top: auto;
+    bottom: 0;
+  }
+
+  span:before,
+  span:after {
+    transition-delay: 0.4s;
+  }
+
+  &:hover {
+    color: tint($btn-color, 75%);
+		cursor: pointer;
+
+    &:before,
+    &:after,
+    span:before,
+    span:after {
+      height: $btn-height;
+    }
+	}
+}
+
+.new-post-btn {
+	$btn-width: 297px;
+	$btn-height: 40px;
+	$btn-color: #428bca;
+	$btn-color-dark: shade($btn-color, 40%);
+	color: tint($btn-color);
+
+	text-align: center;
+	text-decoration: none;
+	position: relative;
+  display: block;
+  @include size(100%, $btn-height);
+  border: 1px solid currentColor;
+	line-height: 38px;
+
+	*, *:before, *:after {
+	 box-sizing: border-box;
+	 transition: 0.5s;
+ 	}
+
+	*:before, *:after {
+  z-index: -1;
+	}
+
+	i, em, b, strong, span {
+	transition: none;
+	}
+
+	&:before,
+  &:after,
+  span:before,
+  span:after {
+    content: '';
+    @include absolute(0,null,null,0);
+    @include size(0, $btn-height);
+    background: rgba($btn-color-dark, 0.25);
+    transition: 0.4s;
+  }
+
+  &:after,
+  span:before {
+    left: auto;
+    right: 0;
+  }
+
+  span:before,
+  span:after {
+    transition-delay: 0.4s;
+  }
+
+  &:hover {
+    color: tint($btn-color, 75%);
+		cursor: pointer;
+
+    &:before,
+    &:after,
+    span:before,
+    span:after {
+      width: $btn-width;
+    }
+  }
+
+  &:active {
+    background: $btn-color;
+  }
+}

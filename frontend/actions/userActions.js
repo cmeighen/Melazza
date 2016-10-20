@@ -1,23 +1,23 @@
 const Dispatcher = require('../dispatcher/dispatcher');
 const UserConstants = require('../constants/userConstants');
 const ErrorConstants = require('../constants/errorConstants');
-const SessionApi = require('../util/sessionApi');
+const SessionUtil = require('../util/sessionUtil');
 
 const UserActions = {
   fetchCurrentUser: function() {
-    SessionApi.fetchCurrentUser(UserActions.receiveCurrentUser);
+    SessionUtil.fetchCurrentUser(UserActions.receiveCurrentUser);
   },
 
   createUser: function(user) {
-    SessionApi.createUser(user, UserActions.receiveCurrentUser);
+    SessionUtil.createUser(user, UserActions.receiveCurrentUser);
   },
 
   loginUser: function(user) {
-    SessionApi.loginUser(user, UserActions.receiveCurrentUser);
+    SessionUtil.loginUser(user, UserActions.receiveCurrentUser);
   },
 
   logoutUser: function() {
-    SessionApi.logoutUser(UserActions.userLoggedOut);
+    SessionUtil.logoutUser(UserActions.userLoggedOut);
   },
 
   clearErrors: function() {

@@ -56,6 +56,10 @@ const Login = React.createClass({
     this.setState({ formType: eventKey });
   },
 
+  demoLogin(){
+    UserActions.loginUser({username: "demo", password: "asdfasdf"});
+  },
+
   render: function() {
     let submitText;
     if (this.state.formType === "logIn") {
@@ -69,6 +73,7 @@ const Login = React.createClass({
         <Nav id="loginsignup" bsStyle="pills" activeKey={this.formType} onSelect={this.handleSelect}>
           <NavItem eventKey="logIn">Log In</NavItem>
           <NavItem eventKey="signUp">Sign Up</NavItem>
+          <NavItem onClick={this.demoLogin}>Use Demo Login</NavItem>
         </Nav>
         <FormGroup controlId="formHorizontalEmail">
           <ControlLabel>Username</ControlLabel>

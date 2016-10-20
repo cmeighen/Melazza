@@ -47,14 +47,45 @@ const PostIndex = React.createClass({
 
   render() {
     const posts = this.state.posts;
-    let postList = posts.map( post => {
-      return(
-        <li key={post.id} onClick={this.handleSelect.bind(this, post.id)}>
-          <div className='post-item-title'>{post.title}</div>
-          <div className='post-item-short'>{post.body}</div>
-        </li>
-      );
-    });
+    let postList = [];
+    for (var i = 0, len = posts.length; i < len; i++) {
+      let post = posts[i];
+      if (this.props.params && this.props.params.postId === post.id) {
+        let posthtml = (
+          <li className="selected" key={post.id} onClick={this.handleSelect.bind(this, post.id)}>
+            <div className='post-item-title'>{post.title}</div>
+            <div className='post-item-short'>{post.body}</div>
+          </li>
+        );
+        postList.push(posthtml);
+      } else {
+        let posthtml = (
+          <li key={post.id} onClick={this.handleSelect.bind(this, post.id)}>
+            <div className='post-item-title'>{post.title}</div>
+            <div className='post-item-short'>{post.body}</div>
+          </li>
+        );
+        postList.push(posthtml);
+      }
+    }
+    // let postList = posts.map( post => {
+    //   debugger
+    //   if (this.props.params && this.props.params.postId === post.id) {
+    //     return (
+    //       <li className="selected" key={post.id} onClick={this.handleSelect.bind(this, post.id)}>
+    //         <div className='post-item-title'>{post.title}</div>
+    //         <div className='post-item-short'>{post.body}</div>
+    //       </li>
+    //     );
+    //   } else {
+    //     return(
+    //       <li key={post.id} onClick={this.handleSelect.bind(this, post.id)}>
+    //         <div className='post-item-title'>{post.title}</div>
+    //         <div className='post-item-short'>{post.body}</div>
+    //       </li>
+    //     );
+    //   }
+    // });
 
     return (
       <div className="post-index">

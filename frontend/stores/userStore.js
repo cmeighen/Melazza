@@ -15,7 +15,7 @@ UserStore._logout = function() {
 };
 
 UserStore.currentUser = function() {
-  return _currentUser;
+  return Object.assign({}, _currentUser);
 };
 
 UserStore.loggedIn = function() {

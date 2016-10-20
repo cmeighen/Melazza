@@ -30,9 +30,7 @@ const PostDetail = React.createClass({
   },
 
   componentWillReceiveProps: function(nextProps){
-    this.setState({
-      post: PostStore.find(nextProps.params.postId)
-    });
+    PostActions.getPost(nextProps.params.postId);
   },
 
   componentWillUnmount: function(){
@@ -44,7 +42,7 @@ const PostDetail = React.createClass({
   },
 
   _onUserChange() {
-    this.setState({ currentUser: UserStore.currentUser});
+    this.setState({ currentUser: UserStore.currentUser()});
   },
 
   openPostForm(){
@@ -56,13 +54,13 @@ const PostDetail = React.createClass({
   },
 
   render: function(){
-
     let answers;
     if (this.state.post && this.state.post.answers) {
       answers = this.state.post.answers;
     }
 
     let editPost;
+    
     if (this.state.currentUser && this.state.currentUser.id === this.state.post.author_id) {
         editPost = (
           <div>
@@ -77,6 +75,8 @@ const PostDetail = React.createClass({
         );
       }
 
+    let postedBy = "Posted by: " + this.state.post.username;
+
     return(
       <div className="post-container clear">
         <div className="post-details">
@@ -85,6 +85,7 @@ const PostDetail = React.createClass({
             <Well bsSize="small">{this.state.post.title}</Well>
             <h5>Full Question</h5>
             <Well bsSize="large">{this.state.post.body}</Well>
+            {postedBy}
             {editPost}
           </Panel>
         </div>

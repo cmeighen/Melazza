@@ -62,9 +62,9 @@
 	var PostDetail = __webpack_require__(530);
 	var Modal = __webpack_require__(537);
 	var Nav = __webpack_require__(557);
-	var App = __webpack_require__(561);
+	var App = __webpack_require__(559);
 	
-	var WelcomePage = __webpack_require__(559);
+	var WelcomePage = __webpack_require__(560);
 	
 	window.hh = hashHistory;
 	window.ps = PostStore;
@@ -27126,7 +27126,7 @@
 	};
 	
 	UserStore.currentUser = function () {
-	  return _currentUser;
+	  return Object.assign({}, _currentUser);
 	};
 	
 	UserStore.loggedIn = function () {
@@ -33935,7 +33935,7 @@
 	var Dispatcher = __webpack_require__(254);
 	var UserConstants = __webpack_require__(257);
 	var ErrorConstants = __webpack_require__(259);
-	var SessionUtil = __webpack_require__(562);
+	var SessionUtil = __webpack_require__(260);
 	
 	var UserActions = {
 	  fetchCurrentUser: function fetchCurrentUser() {
@@ -33995,7 +33995,58 @@
 	};
 
 /***/ },
-/* 260 */,
+/* 260 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	var sessionUtil = {
+	  fetchCurrentUser: function fetchCurrentUser(_success) {
+	    $.ajax({
+	      type: 'GET',
+	      url: 'api/session',
+	      success: function success(currentUser) {
+	        _success(currentUser);
+	      }
+	    });
+	  },
+	
+	  loginUser: function loginUser(user, _success2) {
+	    $.ajax({
+	      type: 'POST',
+	      url: 'api/session',
+	      data: { user: { username: user.username, password: user.password } },
+	      success: function success(currentUser) {
+	        _success2(currentUser);
+	      }
+	    });
+	  },
+	
+	  logoutUser: function logoutUser(_success3) {
+	    $.ajax({
+	      type: 'DELETE',
+	      url: 'api/session',
+	      success: function success(emptyObject) {
+	        _success3();
+	      }
+	    });
+	  },
+	
+	  createUser: function createUser(user, _success4) {
+	    $.ajax({
+	      type: 'POST',
+	      url: 'api/user',
+	      data: { user: { username: user.username, password: user.password } },
+	      success: function success(currentUser) {
+	        _success4(currentUser);
+	      }
+	    });
+	  }
+	};
+	
+	module.exports = sessionUtil;
+
+/***/ },
 /* 261 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -34108,25 +34159,62 @@
 	    this.setState({ showPostFormModal: false });
 	  },
 	  render: function render() {
-	    var _this = this;
-	
 	    var posts = this.state.posts;
-	    var postList = posts.map(function (post) {
-	      return React.createElement(
-	        'li',
-	        { key: post.id, onClick: _this.handleSelect.bind(_this, post.id) },
-	        React.createElement(
-	          'div',
-	          { className: 'post-item-title' },
-	          post.title
-	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'post-item-short' },
-	          post.body
-	        )
-	      );
-	    });
+	    var postList = [];
+	    for (var i = 0, len = posts.length; i < len; i++) {
+	      var post = posts[i];
+	      if (this.props.params && this.props.params.postId === post.id) {
+	        var posthtml = React.createElement(
+	          'li',
+	          { className: 'selected', key: post.id, onClick: this.handleSelect.bind(this, post.id) },
+	          React.createElement(
+	            'div',
+	            { className: 'post-item-title' },
+	            post.title
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'post-item-short' },
+	            post.body
+	          )
+	        );
+	        postList.push(posthtml);
+	      } else {
+	        var _posthtml = React.createElement(
+	          'li',
+	          { key: post.id, onClick: this.handleSelect.bind(this, post.id) },
+	          React.createElement(
+	            'div',
+	            { className: 'post-item-title' },
+	            post.title
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'post-item-short' },
+	            post.body
+	          )
+	        );
+	        postList.push(_posthtml);
+	      }
+	    }
+	    // let postList = posts.map( post => {
+	    //   debugger
+	    //   if (this.props.params && this.props.params.postId === post.id) {
+	    //     return (
+	    //       <li className="selected" key={post.id} onClick={this.handleSelect.bind(this, post.id)}>
+	    //         <div className='post-item-title'>{post.title}</div>
+	    //         <div className='post-item-short'>{post.body}</div>
+	    //       </li>
+	    //     );
+	    //   } else {
+	    //     return(
+	    //       <li key={post.id} onClick={this.handleSelect.bind(this, post.id)}>
+	    //         <div className='post-item-title'>{post.title}</div>
+	    //         <div className='post-item-short'>{post.body}</div>
+	    //       </li>
+	    //     );
+	    //   }
+	    // });
 	
 	    return React.createElement(
 	      'div',
@@ -53784,9 +53872,7 @@
 	  },
 	
 	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
-	    this.setState({
-	      post: PostStore.find(nextProps.params.postId)
-	    });
+	    PostActions.getPost(nextProps.params.postId);
 	  },
 	
 	  componentWillUnmount: function componentWillUnmount() {
@@ -53797,7 +53883,7 @@
 	    this.setState({ post: PostStore.find(this.props.params.postId) });
 	  },
 	  _onUserChange: function _onUserChange() {
-	    this.setState({ currentUser: UserStore.currentUser });
+	    this.setState({ currentUser: UserStore.currentUser() });
 	  },
 	  openPostForm: function openPostForm() {
 	    this.setState({ showPostFormModal: true });
@@ -53808,13 +53894,13 @@
 	
 	
 	  render: function render() {
-	
 	    var answers = void 0;
 	    if (this.state.post && this.state.post.answers) {
 	      answers = this.state.post.answers;
 	    }
 	
 	    var editPost = void 0;
+	
 	    if (this.state.currentUser && this.state.currentUser.id === this.state.post.author_id) {
 	      editPost = React.createElement(
 	        'div',
@@ -53840,6 +53926,8 @@
 	        )
 	      );
 	    }
+	
+	    var postedBy = "Posted by: " + this.state.post.username;
 	
 	    return React.createElement(
 	      'div',
@@ -53870,6 +53958,7 @@
 	            { bsSize: 'large' },
 	            this.state.post.body
 	          ),
+	          postedBy,
 	          editPost
 	        )
 	      ),
@@ -56203,7 +56292,7 @@
 	var hashHistory = __webpack_require__(172).hashHistory;
 	var UserActions = __webpack_require__(258);
 	
-	var LogIn = __webpack_require__(560);
+	var LogIn = __webpack_require__(558);
 	
 	var Modal = __webpack_require__(266).Modal;
 	
@@ -56298,7 +56387,7 @@
 	          { className: 'header-logo' },
 	          React.createElement(
 	            'a',
-	            { href: '/' },
+	            { href: '#/' },
 	            'collabright'
 	          )
 	        ),
@@ -56311,14 +56400,200 @@
 	module.exports = Navigation;
 
 /***/ },
-/* 558 */,
+/* 558 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	var ReactDOM = __webpack_require__(34);
+	var HashHistory = __webpack_require__(172).hashHistory;
+	var UserActions = __webpack_require__(258);
+	var UserStore = __webpack_require__(235);
+	
+	var FormGroup = __webpack_require__(266).FormGroup;
+	var ControlLabel = __webpack_require__(266).ControlLabel;
+	var FormControl = __webpack_require__(266).FormControl;
+	var Button = __webpack_require__(266).Button;
+	
+	var Nav = __webpack_require__(266).Nav;
+	var NavItem = __webpack_require__(266).NavItem;
+	
+	var hashHistory = __webpack_require__(172).hashHistory;
+	
+	var Login = React.createClass({
+	  displayName: 'Login',
+	
+	
+	  getInitialState: function getInitialState() {
+	    return { username: '', password: '', formType: 'logIn' };
+	  },
+	
+	  submitHandler: function submitHandler(e) {
+	    e.preventDefault();
+	    var userData = {
+	      username: this.state.username,
+	      password: this.state.password
+	    };
+	    if (this.state.formType === 'logIn') {
+	      UserActions.loginUser(userData);
+	    } else {
+	      UserActions.createUser(userData);
+	    }
+	  },
+	
+	  componentDidMount: function componentDidMount() {
+	    var self = this;
+	    setTimeout(function () {
+	      ReactDOM.findDOMNode(self.refs.autoFocus).focus();
+	    }, 500);
+	  },
+	
+	  usernameChange: function usernameChange(e) {
+	    e.preventDefault();
+	    this.setState({ username: e.target.value });
+	  },
+	
+	  passwordChange: function passwordChange(e) {
+	    e.preventDefault();
+	    this.setState({ password: e.target.value });
+	  },
+	
+	  handleSelect: function handleSelect(eventKey) {
+	    this.setState({ formType: eventKey });
+	  },
+	
+	  demoLogin: function demoLogin() {
+	    UserActions.loginUser({ username: "demo", password: "asdfasdf" });
+	  },
+	
+	
+	  render: function render() {
+	    var submitText = void 0;
+	    if (this.state.formType === "logIn") {
+	      submitText = "Log In";
+	    } else {
+	      submitText = "Sign Up";
+	    }
+	
+	    return React.createElement(
+	      'form',
+	      { horizontal: true, onSubmit: this.submitHandler },
+	      React.createElement(
+	        Nav,
+	        { id: 'loginsignup', bsStyle: 'pills', activeKey: this.formType, onSelect: this.handleSelect },
+	        React.createElement(
+	          NavItem,
+	          { eventKey: 'logIn' },
+	          'Log In'
+	        ),
+	        React.createElement(
+	          NavItem,
+	          { eventKey: 'signUp' },
+	          'Sign Up'
+	        ),
+	        React.createElement(
+	          NavItem,
+	          { onClick: this.demoLogin },
+	          'Use Demo Login'
+	        )
+	      ),
+	      React.createElement(
+	        FormGroup,
+	        { controlId: 'formHorizontalEmail' },
+	        React.createElement(
+	          ControlLabel,
+	          null,
+	          'Username'
+	        ),
+	        React.createElement(FormControl, { type: 'username', placeholder: 'Username', ref: 'autoFocus', onChange: this.usernameChange })
+	      ),
+	      React.createElement(
+	        FormGroup,
+	        { controlId: 'formHorizontalPassword' },
+	        React.createElement(
+	          ControlLabel,
+	          null,
+	          'Password'
+	        ),
+	        React.createElement(FormControl, { type: 'password', placeholder: 'Password', onChange: this.passwordChange })
+	      ),
+	      React.createElement(
+	        Button,
+	        { type: 'submit' },
+	        submitText
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = Login;
+
+/***/ },
 /* 559 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var React = __webpack_require__(1);
-	var LogIn = __webpack_require__(560);
+	
+	var UserActions = __webpack_require__(258);
+	var UserStore = __webpack_require__(235);
+	
+	var Nav = __webpack_require__(557);
+	var PostIndex = __webpack_require__(263);
+	
+	var App = React.createClass({
+	  displayName: 'App',
+	  getInitialState: function getInitialState() {
+	    return {
+	      currentUser: {}
+	    };
+	  },
+	  componentDidMount: function componentDidMount() {
+	    this.listener = UserStore.addListener(this._updateCurrentUser);
+	    UserActions.fetchCurrentUser();
+	  },
+	  componentWillUnmount: function componentWillUnmount() {
+	    this.listener.remove();
+	  },
+	  _updateCurrentUser: function _updateCurrentUser() {
+	    this.setState({ currentUser: UserStore.currentUser() });
+	  },
+	
+	
+	  render: function render() {
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(Nav, { currentUser: this.state.currentUser }),
+	      React.createElement(
+	        'div',
+	        { className: 'classroom' },
+	        React.createElement(PostIndex, null),
+	        React.createElement(
+	          'div',
+	          { className: 'class-child-container' },
+	          this.props.children
+	        )
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = App;
+	
+	// <PostIndex />
+	// {this.props.children}
+
+/***/ },
+/* 560 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	var LogIn = __webpack_require__(558);
 	
 	var Jumbotron = __webpack_require__(266).Jumbotron;
 	var Modal = __webpack_require__(266).Modal;
@@ -56420,235 +56695,6 @@
 	});
 	
 	module.exports = WelcomePage;
-
-/***/ },
-/* 560 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var React = __webpack_require__(1);
-	var ReactDOM = __webpack_require__(34);
-	var HashHistory = __webpack_require__(172).hashHistory;
-	var UserActions = __webpack_require__(258);
-	var UserStore = __webpack_require__(235);
-	
-	var FormGroup = __webpack_require__(266).FormGroup;
-	var ControlLabel = __webpack_require__(266).ControlLabel;
-	var FormControl = __webpack_require__(266).FormControl;
-	var Button = __webpack_require__(266).Button;
-	
-	var Nav = __webpack_require__(266).Nav;
-	var NavItem = __webpack_require__(266).NavItem;
-	
-	var hashHistory = __webpack_require__(172).hashHistory;
-	
-	var Login = React.createClass({
-	  displayName: 'Login',
-	
-	
-	  getInitialState: function getInitialState() {
-	    return { username: '', password: '', formType: 'logIn' };
-	  },
-	
-	  submitHandler: function submitHandler(e) {
-	    e.preventDefault();
-	    var userData = {
-	      username: this.state.username,
-	      password: this.state.password
-	    };
-	    if (this.state.formType === 'logIn') {
-	      UserActions.loginUser(userData);
-	    } else {
-	      UserActions.createUser(userData);
-	    }
-	  },
-	
-	  componentDidMount: function componentDidMount() {
-	    var self = this;
-	    setTimeout(function () {
-	      ReactDOM.findDOMNode(self.refs.autoFocus).focus();
-	    }, 500);
-	  },
-	
-	  usernameChange: function usernameChange(e) {
-	    e.preventDefault();
-	    this.setState({ username: e.target.value });
-	  },
-	
-	  passwordChange: function passwordChange(e) {
-	    e.preventDefault();
-	    this.setState({ password: e.target.value });
-	  },
-	
-	  handleSelect: function handleSelect(eventKey) {
-	    this.setState({ formType: eventKey });
-	  },
-	
-	  render: function render() {
-	    var submitText = void 0;
-	    if (this.state.formType === "logIn") {
-	      submitText = "Log In";
-	    } else {
-	      submitText = "Sign Up";
-	    }
-	
-	    return React.createElement(
-	      'form',
-	      { horizontal: true, onSubmit: this.submitHandler },
-	      React.createElement(
-	        Nav,
-	        { id: 'loginsignup', bsStyle: 'pills', activeKey: this.formType, onSelect: this.handleSelect },
-	        React.createElement(
-	          NavItem,
-	          { eventKey: 'logIn' },
-	          'Log In'
-	        ),
-	        React.createElement(
-	          NavItem,
-	          { eventKey: 'signUp' },
-	          'Sign Up'
-	        )
-	      ),
-	      React.createElement(
-	        FormGroup,
-	        { controlId: 'formHorizontalEmail' },
-	        React.createElement(
-	          ControlLabel,
-	          null,
-	          'Username'
-	        ),
-	        React.createElement(FormControl, { type: 'username', placeholder: 'Username', ref: 'autoFocus', onChange: this.usernameChange })
-	      ),
-	      React.createElement(
-	        FormGroup,
-	        { controlId: 'formHorizontalPassword' },
-	        React.createElement(
-	          ControlLabel,
-	          null,
-	          'Password'
-	        ),
-	        React.createElement(FormControl, { type: 'password', placeholder: 'Password', onChange: this.passwordChange })
-	      ),
-	      React.createElement(
-	        Button,
-	        { type: 'submit' },
-	        submitText
-	      )
-	    );
-	  }
-	});
-	
-	module.exports = Login;
-
-/***/ },
-/* 561 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var React = __webpack_require__(1);
-	
-	var UserActions = __webpack_require__(258);
-	var UserStore = __webpack_require__(235);
-	
-	var Nav = __webpack_require__(557);
-	var PostIndex = __webpack_require__(263);
-	
-	var App = React.createClass({
-	  displayName: 'App',
-	  getInitialState: function getInitialState() {
-	    return {
-	      currentUser: {}
-	    };
-	  },
-	  componentDidMount: function componentDidMount() {
-	    this.listener = UserStore.addListener(this._updateCurrentUser);
-	    UserActions.fetchCurrentUser();
-	  },
-	  componentWillUnmount: function componentWillUnmount() {
-	    this.listener.remove();
-	  },
-	  _updateCurrentUser: function _updateCurrentUser() {
-	    this.setState({ currentUser: UserStore.currentUser() });
-	  },
-	
-	
-	  render: function render() {
-	    return React.createElement(
-	      'div',
-	      null,
-	      React.createElement(Nav, { currentUser: this.state.currentUser }),
-	      React.createElement(
-	        'div',
-	        { className: 'classroom' },
-	        React.createElement(PostIndex, null),
-	        React.createElement(
-	          'div',
-	          { className: 'class-child-container' },
-	          this.props.children
-	        )
-	      )
-	    );
-	  }
-	});
-	
-	module.exports = App;
-	
-	// <PostIndex />
-	// {this.props.children}
-
-/***/ },
-/* 562 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	var sessionUtil = {
-	  fetchCurrentUser: function fetchCurrentUser(_success) {
-	    $.ajax({
-	      type: 'GET',
-	      url: 'api/session',
-	      success: function success(currentUser) {
-	        _success(currentUser);
-	      }
-	    });
-	  },
-	
-	  loginUser: function loginUser(user, _success2) {
-	    $.ajax({
-	      type: 'POST',
-	      url: 'api/session',
-	      data: { user: { username: user.username, password: user.password } },
-	      success: function success(currentUser) {
-	        _success2(currentUser);
-	      }
-	    });
-	  },
-	
-	  logoutUser: function logoutUser(_success3) {
-	    $.ajax({
-	      type: 'DELETE',
-	      url: 'api/session',
-	      success: function success(emptyObject) {
-	        _success3();
-	      }
-	    });
-	  },
-	
-	  createUser: function createUser(user, _success4) {
-	    $.ajax({
-	      type: 'POST',
-	      url: 'api/user',
-	      data: { user: { username: user.username, password: user.password } },
-	      success: function success(currentUser) {
-	        _success4(currentUser);
-	      }
-	    });
-	  }
-	};
-	
-	module.exports = sessionUtil;
 
 /***/ }
 /******/ ]);

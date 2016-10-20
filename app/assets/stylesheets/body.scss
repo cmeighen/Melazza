@@ -20,9 +20,41 @@ body {
   overflow-y: auto;
 }
 
-.post-index > button {
+.post-index-list {
+  border-style: inset;
+  list-style: none;
+  padding-left: 0;
 
+  li {
+    border: 1px solid grey;
+    padding: 8px;
+    padding-left: 20px;
+    margin: -1px;
+  }
+
+  .selected {
+    background-color: yellow;
+  }
+
+  .post-item-title {
+    color: #30424D;
+    font-size: 12px;
+    font-weight: bold;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .post-item-short {
+    margin-top: 5px;
+    color: #80858A;
+    font-size: 10px;
+    max-height: 38px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.25;
+  }
 }
+
 
 .class-child-container {
   margin-left: 310px;

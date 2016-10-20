@@ -58,7 +58,7 @@ const Navigation = React.createClass({
       <div className="header">
         <nav className="header-nav clear">
           <h1 className="header-logo">
-            <a href="/">collabright</a>
+            <a href="#/">collabright</a>
           </h1>
           {rightNav}
         </nav>

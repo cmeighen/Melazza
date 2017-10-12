@@ -1,7 +1,6 @@
 # collabright
 
-[collabright][collabrightus]
-[collabrightus]: http://www.collabright.us
+[collabright link](https://collabright.herokuapp.com)
 
 ## Description
 
@@ -41,7 +40,7 @@ collabright is single-page, delivering all content on one static page. The root 
 
 ## To Be Implemented
 
-  I will be continuing to work on this project. The features currently planned for implementation are detailed below.
+  Potential future features are listed below
 
 ### Rich Text Editing
 
